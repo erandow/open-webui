@@ -36,6 +36,8 @@ WORKDIR /app
 RUN apk add --no-cache git
 
 COPY package.json package-lock.json ./
+# Increase npm network timeout and retries to avoid EIDLETIMEOUT on slow/unstable connections
+RUN npm config set fetch-timeout 600000 && npm config set fetch-retry-mintimeout 20000 && npm config set fetch-retry-maxtimeout 120000
 RUN npm ci --force
 
 COPY . .
@@ -154,7 +156,8 @@ RUN pip3 install --no-cache-dir uv && \
     fi; \
     fi; \
     mkdir -p /app/backend/data && chown -R $UID:$GID /app/backend/data/ && \
-    rm -rf /var/lib/apt/lists/*;
+    rm -rf /var/lib/apt/lists/* && \
+    python3 -c "import uvicorn" || (echo "FATAL: uvicorn not installed" && exit 1);
 
 # Install Ollama if requested
 RUN if [ "$USE_OLLAMA" = "true" ]; then \
