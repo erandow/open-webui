@@ -27,8 +27,8 @@ ARG GID=0
 FROM --platform=$BUILDPLATFORM node:22-alpine3.20 AS build
 ARG BUILD_HASH
 
-# Set Node.js options (heap limit Allocation failed - JavaScript heap out of memory)
-# ENV NODE_OPTIONS="--max-old-space-size=4096"
+# Set Node.js options (heap limit - avoids "Exit handler never called" / OOM during npm ci)
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 WORKDIR /app
 
@@ -38,6 +38,8 @@ RUN apk add --no-cache git
 COPY package.json package-lock.json ./
 # Increase npm network timeout and retries to avoid EIDLETIMEOUT on slow/unstable connections
 RUN npm config set fetch-timeout 600000 && npm config set fetch-retry-mintimeout 20000 && npm config set fetch-retry-maxtimeout 120000
+# Clean cache to avoid corrupted state; ci with prefer-offline to use cache when valid
+RUN npm cache clean --force 2>/dev/null || true
 RUN npm ci --force
 
 COPY . .
