@@ -202,7 +202,7 @@
 
 			<DropdownMenu.Item
 				class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer"
-				on:click={async () => {
+				onSelect={async () => {
 					show = false;
 
 					await showSettings.set(true);
@@ -221,7 +221,7 @@
 
 			<DropdownMenu.Item
 				class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer"
-				on:click={async () => {
+				onSelect={async () => {
 					show = false;
 
 					dispatch('show', 'archived-chat');
@@ -244,7 +244,7 @@
 					as="a"
 					href="/playground"
 					class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition select-none"
-					on:click={async () => {
+					onSelect={async () => {
 						show = false;
 						if ($mobile) {
 							await tick();
@@ -261,7 +261,7 @@
 					as="a"
 					href="/admin"
 					class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition select-none"
-					on:click={async () => {
+					onSelect={async () => {
 						show = false;
 						if ($mobile) {
 							await tick();
@@ -287,7 +287,7 @@
 						target="_blank"
 						class="flex gap-3 items-center py-1.5 px-3 text-sm select-none w-full cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition"
 						id="chat-share-button"
-						on:click={() => {
+						onSelect={() => {
 							show = false;
 						}}
 						href="https://docs.openwebui.com"
@@ -302,7 +302,7 @@
 						target="_blank"
 						class="flex gap-3 items-center py-1.5 px-3 text-sm select-none w-full cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition"
 						id="chat-share-button"
-						on:click={() => {
+						onSelect={() => {
 							show = false;
 						}}
 						href="https://github.com/open-webui/open-webui/releases"
@@ -315,7 +315,7 @@
 				<DropdownMenu.Item
 					class="flex gap-3 items-center py-1.5 px-3 text-sm select-none w-full  hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition cursor-pointer"
 					id="chat-share-button"
-					on:click={async () => {
+					onSelect={async () => {
 						show = false;
 						showShortcuts.set(!$showShortcuts);
 
@@ -334,7 +334,7 @@
 
 			<DropdownMenu.Item
 				class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition"
-				on:click={async () => {
+				onSelect={async () => {
 					const res = await userSignOut();
 					user.set(null);
 					localStorage.removeItem('token');
