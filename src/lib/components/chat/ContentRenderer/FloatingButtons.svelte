@@ -117,7 +117,7 @@
 		responseContent = '';
 
 		let res;
-		[res, controller] = await chatCompletion(localStorage.token, {
+		[res, controller] = await chatCompletion(sessionStorage.token, {
 			model: model,
 			model_item: $models.find((m) => m.id === model),
 			session_id: $socket?.id,

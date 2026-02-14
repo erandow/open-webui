@@ -42,7 +42,7 @@
 	};
 
 	const removeMemberHandler = async (userId) => {
-		const res = await removeMembersById(localStorage.token, channel.id, {
+		const res = await removeMembersById(sessionStorage.token, channel.id, {
 			user_ids: [userId]
 		}).catch((error) => {
 			toast.error(`${error}`);

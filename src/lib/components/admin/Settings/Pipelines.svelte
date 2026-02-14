@@ -52,7 +52,7 @@
 			}
 
 			const res = await updatePipelineValves(
-				localStorage.token,
+				sessionStorage.token,
 				pipeline.id,
 				valves,
 				selectedPipelinesUrlIdx
@@ -65,7 +65,7 @@
 				setPipelines();
 				models.set(
 					await getModels(
-						localStorage.token,
+						sessionStorage.token,
 						$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null)
 					)
 				);
@@ -81,12 +81,12 @@
 		valves_spec = null;
 
 		valves_spec = await getPipelineValvesSpec(
-			localStorage.token,
+			sessionStorage.token,
 			pipelines[idx].id,
 			selectedPipelinesUrlIdx
 		);
 		valves = await getPipelineValves(
-			localStorage.token,
+			sessionStorage.token,
 			pipelines[idx].id,
 			selectedPipelinesUrlIdx
 		);
@@ -105,7 +105,7 @@
 
 		if (PIPELINES_LIST.length > 0) {
 			console.debug(selectedPipelinesUrlIdx);
-			pipelines = await getPipelines(localStorage.token, selectedPipelinesUrlIdx);
+			pipelines = await getPipelines(sessionStorage.token, selectedPipelinesUrlIdx);
 
 			if (pipelines.length > 0) {
 				selectedPipelineIdx = 0;
@@ -119,7 +119,7 @@
 	const addPipelineHandler = async () => {
 		downloading = true;
 		const res = await downloadPipeline(
-			localStorage.token,
+			sessionStorage.token,
 			pipelineDownloadUrl,
 			selectedPipelinesUrlIdx
 		).catch((error) => {
@@ -132,7 +132,7 @@
 			setPipelines();
 			models.set(
 				await getModels(
-					localStorage.token,
+					sessionStorage.token,
 					$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null)
 				)
 			);
@@ -149,7 +149,7 @@
 
 			console.log(file);
 
-			const res = await uploadPipeline(localStorage.token, file, selectedPipelinesUrlIdx).catch(
+			const res = await uploadPipeline(sessionStorage.token, file, selectedPipelinesUrlIdx).catch(
 				(error) => {
 					console.error(error);
 					toast.error($i18n.t('Something went wrong :/'));
@@ -162,7 +162,7 @@
 				setPipelines();
 				models.set(
 					await getModels(
-						localStorage.token,
+						sessionStorage.token,
 						$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null)
 					)
 				);
@@ -183,7 +183,7 @@
 
 	const deletePipelineHandler = async () => {
 		const res = await deletePipeline(
-			localStorage.token,
+			sessionStorage.token,
 			pipelines[selectedPipelineIdx].id,
 			selectedPipelinesUrlIdx
 		).catch((error) => {
@@ -196,7 +196,7 @@
 			setPipelines();
 			models.set(
 				await getModels(
-					localStorage.token,
+					sessionStorage.token,
 					$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null)
 				)
 			);
@@ -204,7 +204,7 @@
 	};
 
 	onMount(async () => {
-		PIPELINES_LIST = await getPipelinesList(localStorage.token);
+		PIPELINES_LIST = await getPipelinesList(sessionStorage.token);
 		console.log(PIPELINES_LIST);
 
 		if (PIPELINES_LIST.length > 0) {

@@ -57,7 +57,7 @@
 			});
 		}
 
-		const updatedUser = await updateUserProfile(localStorage.token, {
+		const updatedUser = await updateUserProfile(sessionStorage.token, {
 			name: name,
 			profile_image_url: profileImageUrl,
 			bio: bio ? bio : null,
@@ -69,7 +69,7 @@
 
 		if (updatedUser) {
 			// Get Session User Info
-			const sessionUser = await getSessionUser(localStorage.token).catch((error) => {
+			const sessionUser = await getSessionUser(sessionStorage.token).catch((error) => {
 				toast.error(`${error}`);
 				return null;
 			});
@@ -81,7 +81,7 @@
 	};
 
 	const createAPIKeyHandler = async () => {
-		APIKey = await createAPIKey(localStorage.token);
+		APIKey = await createAPIKey(sessionStorage.token);
 		if (APIKey) {
 			toast.success($i18n.t('API Key created.'));
 		} else {
@@ -90,7 +90,7 @@
 	};
 
 	onMount(async () => {
-		const user = await getSessionUser(localStorage.token).catch((error) => {
+		const user = await getSessionUser(sessionStorage.token).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -114,7 +114,7 @@
 			($config?.features?.enable_api_keys ?? true) &&
 			(user?.role === 'admin' || (user?.permissions?.features?.api_keys ?? false))
 		) {
-			APIKey = await getAPIKey(localStorage.token).catch((error) => {
+			APIKey = await getAPIKey(sessionStorage.token).catch((error) => {
 				console.log(error);
 				return '';
 			});
@@ -269,12 +269,12 @@
 							</div>
 
 							<div class="flex">
-								<SensitiveInput value={localStorage.token} readOnly={true} />
+								<SensitiveInput value={sessionStorage.token} readOnly={true} />
 
 								<button
 									class="ml-1.5 px-1.5 py-1 dark:hover:bg-gray-850 transition rounded-lg"
 									on:click={() => {
-										copyToClipboard(localStorage.token);
+										copyToClipboard(sessionStorage.token);
 										JWTTokenCopied = true;
 										setTimeout(() => {
 											JWTTokenCopied = false;

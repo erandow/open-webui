@@ -9,7 +9,7 @@
 			(async () => {
 				models.set(
 					await getModels(
-						localStorage.token,
+						sessionStorage.token,
 						$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null)
 					)
 				);

@@ -17,7 +17,7 @@
 	$: skillId = $page.url.searchParams.get('id');
 
 	const onSubmit = async (_skill) => {
-		const updatedSkill = await updateSkillById(localStorage.token, skillId, _skill).catch(
+		const updatedSkill = await updateSkillById(sessionStorage.token, skillId, _skill).catch(
 			(error) => {
 				toast.error(`${error}`);
 				return null;
@@ -26,7 +26,7 @@
 
 		if (updatedSkill) {
 			toast.success($i18n.t('Skill updated successfully'));
-			await skills.set(await getSkills(localStorage.token));
+			await skills.set(await getSkills(sessionStorage.token));
 			skill = {
 				id: updatedSkill.id,
 				name: updatedSkill.name,
@@ -40,7 +40,7 @@
 
 	onMount(async () => {
 		if (skillId) {
-			const _skill = await getSkillById(localStorage.token, skillId).catch((error) => {
+			const _skill = await getSkillById(sessionStorage.token, skillId).catch((error) => {
 				toast.error(`${error}`);
 				return null;
 			});

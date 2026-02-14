@@ -532,12 +532,12 @@
 		console.log(updated);
 		await settings.set({ ...$settings, ...updated });
 		await models.set(await getModels());
-		await updateUserSettings(localStorage.token, { ui: $settings });
+		await updateUserSettings(sessionStorage.token, { ui: $settings });
 	};
 
 	const getModels = async () => {
 		return await _getModels(
-			localStorage.token,
+			sessionStorage.token,
 			$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null)
 		);
 	};

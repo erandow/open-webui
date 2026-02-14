@@ -48,7 +48,7 @@
 
 	const getUserList = async () => {
 		try {
-			const res = await getUsers(localStorage.token, query, orderBy, direction, page).catch(
+			const res = await getUsers(sessionStorage.token, query, orderBy, direction, page).catch(
 				(error) => {
 					toast.error(`${error}`);
 					return null;
@@ -66,12 +66,12 @@
 
 	const toggleMember = async (userId, state) => {
 		if (state === 'checked') {
-			await addUserToGroup(localStorage.token, groupId, [userId]).catch((error) => {
+			await addUserToGroup(sessionStorage.token, groupId, [userId]).catch((error) => {
 				toast.error(`${error}`);
 				return null;
 			});
 		} else {
-			await removeUserFromGroup(localStorage.token, groupId, [userId]).catch((error) => {
+			await removeUserFromGroup(sessionStorage.token, groupId, [userId]).catch((error) => {
 				toast.error(`${error}`);
 				return null;
 			});

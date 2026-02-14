@@ -236,7 +236,7 @@
 			if ((chat?.id ?? '').startsWith('local') || $temporaryChatEnabled) {
 				chatObj = chat;
 			} else {
-				chatObj = await getChatById(localStorage.token, chat.id);
+				chatObj = await getChatById(sessionStorage.token, chat.id);
 			}
 
 			let blob = new Blob([JSON.stringify([chatObj])], {

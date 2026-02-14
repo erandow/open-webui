@@ -31,7 +31,7 @@
 
 	const getItemsPage = async () => {
 		itemsLoading = true;
-		let res = await getNoteList(localStorage.token, page).catch(() => {
+		let res = await getNoteList(sessionStorage.token, page).catch(() => {
 			return [];
 		});
 

@@ -60,7 +60,7 @@
 
 	const init = async () => {
 		if ($_tools === null) {
-			await _tools.set(await getTools(localStorage.token));
+			await _tools.set(await getTools(sessionStorage.token));
 		}
 
 		if ($_tools) {

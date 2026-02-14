@@ -47,7 +47,7 @@
 			loading = true;
 
 			const res = await addUser(
-				localStorage.token,
+				sessionStorage.token,
 				_user.name,
 				_user.email,
 				_user.password,
@@ -84,7 +84,7 @@
 								['admin', 'user', 'pending'].includes(columns[3].toLowerCase())
 							) {
 								const res = await addUser(
-									localStorage.token,
+									sessionStorage.token,
 									columns[0],
 									columns[1],
 									columns[2],

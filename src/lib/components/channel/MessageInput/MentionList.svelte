@@ -32,7 +32,7 @@
 	);
 
 	const getUserList = async () => {
-		const res = await searchUsers(localStorage.token, query).catch((error) => {
+		const res = await searchUsers(sessionStorage.token, query).catch((error) => {
 			console.error('Error searching users:', error);
 			return null;
 		});

@@ -180,7 +180,7 @@ Based on the user's instruction, update and enhance the existing notes or select
 		);
 
 		const [res, controller] = await chatCompletion(
-			localStorage.token,
+			sessionStorage.token,
 			{
 				model: model.id,
 				stream: true,

@@ -34,7 +34,7 @@
 			return;
 		}
 
-		const res = await createNewFunction(localStorage.token, {
+		const res = await createNewFunction(sessionStorage.token, {
 			id: data.id,
 			name: data.name,
 			meta: data.meta,
@@ -46,10 +46,10 @@
 
 		if (res) {
 			toast.success($i18n.t('Function created successfully'));
-			functions.set(await getFunctions(localStorage.token));
+			functions.set(await getFunctions(sessionStorage.token));
 			models.set(
 				await getModels(
-					localStorage.token,
+					sessionStorage.token,
 					$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null),
 					false,
 					true

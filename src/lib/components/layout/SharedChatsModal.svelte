@@ -46,10 +46,10 @@
 		chatList = null;
 
 		if (query === '') {
-			chatList = await getSharedChatList(localStorage.token, page, filter);
+			chatList = await getSharedChatList(sessionStorage.token, page, filter);
 		} else {
 			searchDebounceTimeout = setTimeout(async () => {
-				chatList = await getSharedChatList(localStorage.token, page, filter);
+				chatList = await getSharedChatList(sessionStorage.token, page, filter);
 			}, 500);
 		}
 
@@ -67,9 +67,9 @@
 		let newChatList = [];
 
 		if (query) {
-			newChatList = await getSharedChatList(localStorage.token, page, filter);
+			newChatList = await getSharedChatList(sessionStorage.token, page, filter);
 		} else {
-			newChatList = await getSharedChatList(localStorage.token, page, filter);
+			newChatList = await getSharedChatList(sessionStorage.token, page, filter);
 		}
 
 		// once the bottom of the list has been reached (no results) there is no need to continue querying
@@ -83,7 +83,7 @@
 	};
 
 	const unshareHandler = async (chatId: string) => {
-		const res = await deleteSharedChatById(localStorage.token, chatId).catch((error) => {
+		const res = await deleteSharedChatById(sessionStorage.token, chatId).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -98,7 +98,7 @@
 	};
 
 	const init = async () => {
-		chatList = await getSharedChatList(localStorage.token);
+		chatList = await getSharedChatList(sessionStorage.token);
 	};
 
 	$: if (show) {

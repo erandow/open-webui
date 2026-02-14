@@ -13,7 +13,7 @@
 
 	const updatePasswordHandler = async () => {
 		if (newPassword === newPasswordConfirm) {
-			const res = await updateUserPassword(localStorage.token, currentPassword, newPassword).catch(
+			const res = await updateUserPassword(sessionStorage.token, currentPassword, newPassword).catch(
 				(error) => {
 					toast.error(`${error}`);
 					return null;

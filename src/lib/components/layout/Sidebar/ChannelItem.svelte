@@ -53,7 +53,7 @@
 	{onUpdate}
 	onSubmit={async (payload: any) => {
 		const { name, is_private, access_grants, group_ids, user_ids } = payload ?? {};
-		const res = await updateChannelById(localStorage.token, channel.id, {
+		const res = await updateChannelById(sessionStorage.token, channel.id, {
 			name,
 			is_private,
 			access_grants,
@@ -219,7 +219,7 @@
 						})
 					);
 
-					await updateChannelMemberActiveStatusById(localStorage.token, channel.id, false).catch(
+					await updateChannelMemberActiveStatusById(sessionStorage.token, channel.id, false).catch(
 						(error) => {
 							toast.error(`${error}`);
 						}

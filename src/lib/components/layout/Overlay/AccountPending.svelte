@@ -11,7 +11,7 @@
 	let adminDetails = null;
 
 	onMount(async () => {
-		adminDetails = await getAdminDetails(localStorage.token).catch((err) => {
+		adminDetails = await getAdminDetails(sessionStorage.token).catch((err) => {
 			console.error(err);
 			return null;
 		});
@@ -72,7 +72,7 @@
 					<button
 						class="text-xs text-center w-full mt-2 text-gray-400 underline"
 						on:click={async () => {
-							localStorage.removeItem('token');
+							sessionStorage.removeItem('token');
 							location.href = '/auth';
 						}}>{$i18n.t('Sign Out')}</button
 					>

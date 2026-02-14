@@ -35,7 +35,7 @@ const login = (email: string, password: string) => {
 					method: 'GET',
 					url: '/api/v1/auths/',
 					headers: {
-						Authorization: 'Bearer ' + localStorage.getItem('token')
+						Authorization: 'Bearer ' + sessionStorage.getItem('token')
 					}
 				});
 			}

@@ -108,7 +108,7 @@
 		});
 
 		updateEmbeddingModelLoading = true;
-		const res = await updateEmbeddingConfig(localStorage.token, {
+		const res = await updateEmbeddingConfig(sessionStorage.token, {
 			RAG_EMBEDDING_ENGINE: RAG_EMBEDDING_ENGINE,
 			RAG_EMBEDDING_MODEL: RAG_EMBEDDING_MODEL,
 			RAG_EMBEDDING_BATCH_SIZE: RAG_EMBEDDING_BATCH_SIZE,
@@ -216,7 +216,7 @@
 			}
 		}
 
-		const res = await updateRAGConfig(localStorage.token, {
+		const res = await updateRAGConfig(sessionStorage.token, {
 			...RAGConfig,
 			ALLOWED_FILE_EXTENSIONS: RAGConfig.ALLOWED_FILE_EXTENSIONS.split(',')
 				.map((ext) => ext.trim())
@@ -234,7 +234,7 @@
 	};
 
 	const setEmbeddingConfig = async () => {
-		const embeddingConfig = await getEmbeddingConfig(localStorage.token);
+		const embeddingConfig = await getEmbeddingConfig(sessionStorage.token);
 
 		if (embeddingConfig) {
 			RAG_EMBEDDING_ENGINE = embeddingConfig.RAG_EMBEDDING_ENGINE;
@@ -256,7 +256,7 @@
 	onMount(async () => {
 		await setEmbeddingConfig();
 
-		const config = await getRAGConfig(localStorage.token);
+		const config = await getRAGConfig(sessionStorage.token);
 		config.ALLOWED_FILE_EXTENSIONS = (config?.ALLOWED_FILE_EXTENSIONS ?? []).join(', ');
 
 		config.DOCLING_PARAMS =
@@ -276,7 +276,7 @@
 <ResetUploadDirConfirmDialog
 	bind:show={showResetUploadDirConfirm}
 	on:confirm={async () => {
-		const res = await deleteAllFiles(localStorage.token).catch((error) => {
+		const res = await deleteAllFiles(sessionStorage.token).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -290,7 +290,7 @@
 <ResetVectorDBConfirmDialog
 	bind:show={showResetConfirm}
 	on:confirm={() => {
-		const res = resetVectorDB(localStorage.token).catch((error) => {
+		const res = resetVectorDB(sessionStorage.token).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -304,7 +304,7 @@
 <ReindexKnowledgeFilesConfirmDialog
 	bind:show={showReindexConfirm}
 	on:confirm={async () => {
-		const res = await reindexKnowledgeFiles(localStorage.token).catch((error) => {
+		const res = await reindexKnowledgeFiles(sessionStorage.token).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});

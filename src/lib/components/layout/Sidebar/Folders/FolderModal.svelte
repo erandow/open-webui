@@ -63,7 +63,7 @@
 
 	const init = async () => {
 		if (folderId) {
-			folder = await getFolderById(localStorage.token, folderId).catch((error) => {
+			folder = await getFolderById(sessionStorage.token, folderId).catch((error) => {
 				toast.error(`${error}`);
 				return null;
 			});

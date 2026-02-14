@@ -24,7 +24,7 @@
 	const loadAnalytics = async () => {
 		loading = true;
 		try {
-			const result = await getUserAnalytics(localStorage.token, null, null, 100);
+			const result = await getUserAnalytics(sessionStorage.token, null, null, 100);
 			userStats = result?.users ?? [];
 		} catch (err) {
 			console.error('User analytics load failed:', err);

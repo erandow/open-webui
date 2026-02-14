@@ -28,7 +28,7 @@
 			return;
 		}
 
-		const res = await createNewKnowledge(localStorage.token, name, description, accessGrants).catch(
+		const res = await createNewKnowledge(sessionStorage.token, name, description, accessGrants).catch(
 			(e) => {
 				toast.error(`${e}`);
 			}

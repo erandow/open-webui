@@ -26,7 +26,7 @@
 	const loadAnalytics = async () => {
 		loading = true;
 		try {
-			const result = await getModelAnalytics(localStorage.token);
+			const result = await getModelAnalytics(sessionStorage.token);
 			const modelsMap = new Map($models.map((m) => [m.id, m.name || m.id]));
 
 			modelStats = (result?.models ?? []).map((entry) => ({

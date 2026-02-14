@@ -76,13 +76,13 @@
 			if (sourceImages.length > 0) {
 				console.log('Calling imageEdits with', sourceImages.length, 'images');
 				result = await imageEdits(
-					localStorage.token,
+					sessionStorage.token,
 					sourceImages.length === 1 ? sourceImages[0] : sourceImages,
 					prompt
 				);
 			} else {
 				console.log('Calling imageGenerations');
-				result = await imageGenerations(localStorage.token, prompt);
+				result = await imageGenerations(sessionStorage.token, prompt);
 			}
 
 			console.log('Result:', result);

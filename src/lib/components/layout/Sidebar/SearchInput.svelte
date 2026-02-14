@@ -188,7 +188,7 @@
 	const initTags = async () => {
 		loading = true;
 
-		await tags.set(await getAllTags(localStorage.token));
+		await tags.set(await getAllTags(sessionStorage.token));
 		loading = false;
 	};
 

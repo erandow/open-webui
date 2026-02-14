@@ -111,13 +111,13 @@
 		if (!$temporaryChatEnabled) {
 			history = history;
 			await tick();
-			await updateChatById(localStorage.token, chatId, {
+			await updateChatById(sessionStorage.token, chatId, {
 				history: history,
 				messages: messages
 			});
 
 			currentChatPage.set(1);
-			await chats.set(await getChatList(localStorage.token, $currentChatPage));
+			await chats.set(await getChatList(sessionStorage.token, $currentChatPage));
 		}
 	};
 

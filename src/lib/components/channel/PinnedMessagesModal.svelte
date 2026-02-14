@@ -28,7 +28,7 @@
 
 		loading = true;
 		try {
-			const res = await getChannelPinnedMessages(localStorage.token, channel.id, page).catch(
+			const res = await getChannelPinnedMessages(sessionStorage.token, channel.id, page).catch(
 				(error) => {
 					toast.error(`${error}`);
 					return null;
@@ -111,7 +111,7 @@
 												onPin(message.id, !message.is_pinned);
 
 												const updatedMessage = await pinMessage(
-													localStorage.token,
+													sessionStorage.token,
 													message.channel_id,
 													message.id,
 													!message.is_pinned

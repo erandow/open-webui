@@ -55,10 +55,10 @@
 		chatList = null;
 
 		if (query === '') {
-			chatList = await getChatListByUserId(localStorage.token, user.id, page, filter);
+			chatList = await getChatListByUserId(sessionStorage.token, user.id, page, filter);
 		} else {
 			searchDebounceTimeout = setTimeout(async () => {
-				chatList = await getChatListByUserId(localStorage.token, user.id, page, filter);
+				chatList = await getChatListByUserId(sessionStorage.token, user.id, page, filter);
 			}, 500);
 		}
 
@@ -75,7 +75,7 @@
 
 		let newChatList = [];
 
-		newChatList = await getChatListByUserId(localStorage.token, user.id, page, filter);
+		newChatList = await getChatListByUserId(sessionStorage.token, user.id, page, filter);
 
 		// once the bottom of the list has been reached (no results) there is no need to continue querying
 		allChatsLoaded = newChatList.length === 0;
@@ -88,7 +88,7 @@
 	};
 
 	const init = async () => {
-		chatList = await getChatListByUserId(localStorage.token, user.id, page, filter);
+		chatList = await getChatListByUserId(sessionStorage.token, user.id, page, filter);
 	};
 
 	$: if (show) {

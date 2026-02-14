@@ -12,7 +12,7 @@
 	const i18n = getContext('i18n');
 
 	onMount(async () => {
-		const res = await getSkillItems(localStorage.token).catch(() => null);
+		const res = await getSkillItems(sessionStorage.token).catch(() => null);
 		const skills = res?.items ?? [];
 		_skills = skills.reduce((acc: Record<string, any>, skill: any) => {
 			acc[skill.id] = {

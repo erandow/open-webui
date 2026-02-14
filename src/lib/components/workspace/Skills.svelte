@@ -59,7 +59,7 @@
 
 		loading = true;
 		try {
-			const res = await getSkillItems(localStorage.token, query, viewOption, page).catch(
+			const res = await getSkillItems(sessionStorage.token, query, viewOption, page).catch(
 				(error) => {
 					toast.error(`${error}`);
 					return null;
@@ -93,7 +93,7 @@
 	}
 
 	const cloneHandler = async (skill) => {
-		const _skill = await getSkillById(localStorage.token, skill.id).catch((error) => {
+		const _skill = await getSkillById(sessionStorage.token, skill.id).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -109,7 +109,7 @@
 	};
 
 	const exportHandler = async (skill) => {
-		const _skill = await getSkillById(localStorage.token, skill.id).catch((error) => {
+		const _skill = await getSkillById(sessionStorage.token, skill.id).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -123,7 +123,7 @@
 	};
 
 	const deleteHandler = async (skill) => {
-		const res = await deleteSkillById(localStorage.token, skill.id).catch((error) => {
+		const res = await deleteSkillById(sessionStorage.token, skill.id).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -134,7 +134,7 @@
 
 		page = 1;
 		loadSkillItems();
-		await _skills.set(await getSkills(localStorage.token));
+		await _skills.set(await getSkills(sessionStorage.token));
 	};
 
 	onMount(async () => {
@@ -243,7 +243,7 @@
 					<button
 						class="flex text-xs items-center space-x-1 px-3 py-1.5 rounded-xl bg-gray-50 hover:bg-gray-100 dark:bg-gray-850 dark:hover:bg-gray-800 dark:text-gray-200 transition"
 						on:click={async () => {
-							const _skills = await exportSkills(localStorage.token).catch((error) => {
+							const _skills = await exportSkills(sessionStorage.token).catch((error) => {
 								toast.error(`${error}`);
 								return null;
 							});
@@ -456,7 +456,7 @@
 											<Switch
 												bind:state={skill.is_active}
 												on:change={async () => {
-													toggleSkillById(localStorage.token, skill.id);
+													toggleSkillById(sessionStorage.token, skill.id);
 												}}
 											/>
 										</Tooltip>

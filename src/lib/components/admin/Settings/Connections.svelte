@@ -24,7 +24,7 @@
 
 	const getModels = async () => {
 		const models = await _getModels(
-			localStorage.token,
+			sessionStorage.token,
 			$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null),
 			false,
 			true
@@ -70,7 +70,7 @@
 				}
 			}
 
-			const res = await updateOpenAIConfig(localStorage.token, {
+			const res = await updateOpenAIConfig(sessionStorage.token, {
 				ENABLE_OPENAI_API: ENABLE_OPENAI_API,
 				OPENAI_API_BASE_URLS: OPENAI_API_BASE_URLS,
 				OPENAI_API_KEYS: OPENAI_API_KEYS,
@@ -91,7 +91,7 @@
 			// Remove trailing slashes
 			OLLAMA_BASE_URLS = OLLAMA_BASE_URLS.map((url) => url.replace(/\/$/, ''));
 
-			const res = await updateOllamaConfig(localStorage.token, {
+			const res = await updateOllamaConfig(sessionStorage.token, {
 				ENABLE_OLLAMA_API: ENABLE_OLLAMA_API,
 				OLLAMA_BASE_URLS: OLLAMA_BASE_URLS,
 				OLLAMA_API_CONFIGS: OLLAMA_API_CONFIGS
@@ -107,7 +107,7 @@
 	};
 
 	const updateConnectionsHandler = async () => {
-		const res = await setConnectionsConfig(localStorage.token, connectionsConfig).catch((error) => {
+		const res = await setConnectionsConfig(sessionStorage.token, connectionsConfig).catch((error) => {
 			toast.error(`${error}`);
 		});
 
@@ -143,13 +143,13 @@
 
 			await Promise.all([
 				(async () => {
-					ollamaConfig = await getOllamaConfig(localStorage.token);
+					ollamaConfig = await getOllamaConfig(sessionStorage.token);
 				})(),
 				(async () => {
-					openaiConfig = await getOpenAIConfig(localStorage.token);
+					openaiConfig = await getOpenAIConfig(sessionStorage.token);
 				})(),
 				(async () => {
-					connectionsConfig = await getConnectionsConfig(localStorage.token);
+					connectionsConfig = await getConnectionsConfig(sessionStorage.token);
 				})()
 			]);
 
@@ -177,7 +177,7 @@
 					if (!(OPENAI_API_CONFIGS[idx]?.enable ?? true)) {
 						return;
 					}
-					const res = await getOpenAIModels(localStorage.token, idx);
+					const res = await getOpenAIModels(sessionStorage.token, idx);
 					if (res.pipelines) {
 						pipelineUrls[url] = true;
 					}

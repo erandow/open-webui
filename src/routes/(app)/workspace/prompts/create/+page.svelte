@@ -20,7 +20,7 @@
 	let clone = false;
 
 	const onSubmit = async (_prompt) => {
-		const res = await createNewPrompt(localStorage.token, _prompt).catch((error) => {
+		const res = await createNewPrompt(sessionStorage.token, _prompt).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -28,7 +28,7 @@
 		if (res) {
 			toast.success($i18n.t('Prompt created successfully'));
 
-			await prompts.set(await getPrompts(localStorage.token));
+			await prompts.set(await getPrompts(sessionStorage.token));
 			await goto('/workspace/prompts');
 		}
 	};

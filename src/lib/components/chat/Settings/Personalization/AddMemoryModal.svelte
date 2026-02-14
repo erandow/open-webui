@@ -18,7 +18,7 @@
 	const submitHandler = async () => {
 		loading = true;
 
-		const res = await addNewMemory(localStorage.token, content).catch((error) => {
+		const res = await addNewMemory(sessionStorage.token, content).catch((error) => {
 			toast.error(`${error}`);
 
 			return null;

@@ -48,7 +48,7 @@
 
 	let usage = null;
 	const getUsageInfo = async () => {
-		const res = await getUsage(localStorage.token).catch((error) => {
+		const res = await getUsage(sessionStorage.token).catch((error) => {
 			console.error('Error fetching usage info:', error);
 		});
 
@@ -73,7 +73,7 @@
 <UserStatusModal
 	bind:show={showUserStatusModal}
 	onSave={async () => {
-		user.set(await getSessionUser(localStorage.token));
+		user.set(await getSessionUser(sessionStorage.token));
 	}}
 />
 
@@ -160,14 +160,14 @@
 											e.stopPropagation();
 											e.stopImmediatePropagation();
 
-											const res = await updateUserStatus(localStorage.token, {
+											const res = await updateUserStatus(sessionStorage.token, {
 												status_emoji: '',
 												status_message: ''
 											});
 
 											if (res) {
 												toast.success($i18n.t('Status cleared successfully'));
-												user.set(await getSessionUser(localStorage.token));
+												user.set(await getSessionUser(sessionStorage.token));
 											} else {
 												toast.error($i18n.t('Failed to clear status'));
 											}
@@ -337,7 +337,7 @@
 				onSelect={async () => {
 					const res = await userSignOut();
 					user.set(null);
-					localStorage.removeItem('token');
+					sessionStorage.removeItem('token');
 
 					location.href = res?.redirect_url ?? '/auth';
 					show = false;

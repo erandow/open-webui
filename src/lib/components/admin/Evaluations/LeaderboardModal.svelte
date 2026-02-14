@@ -32,7 +32,7 @@
 		if (!model?.id) return;
 		loadingHistory = true;
 		try {
-			const result = await getModelHistory(localStorage.token, model.id, days);
+			const result = await getModelHistory(sessionStorage.token, model.id, days);
 			history = result?.history ?? [];
 		} catch (err) {
 			console.error('Failed to load model history:', err);

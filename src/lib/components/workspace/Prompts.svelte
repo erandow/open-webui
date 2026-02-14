@@ -78,7 +78,7 @@
 		loading = true;
 		try {
 			const res = await getPromptItems(
-				localStorage.token,
+				sessionStorage.token,
 				query,
 				viewOption,
 				selectedTag,
@@ -95,7 +95,7 @@
 				total = res.total;
 
 				// get tags
-				tags = await getPromptTags(localStorage.token).catch((error) => {
+				tags = await getPromptTags(sessionStorage.token).catch((error) => {
 					toast.error(`${error}`);
 					return [];
 				});
@@ -158,7 +158,7 @@
 	const deleteHandler = async (prompt) => {
 		const command = prompt.command;
 
-		const res = await deletePromptById(localStorage.token, prompt.id).catch((err) => {
+		const res = await deletePromptById(sessionStorage.token, prompt.id).catch((err) => {
 			toast.error(err);
 			return null;
 		});
@@ -169,7 +169,7 @@
 
 		page = 1;
 		getPromptList();
-		await _prompts.set(await getPrompts(localStorage.token));
+		await _prompts.set(await getPrompts(sessionStorage.token));
 	};
 
 	onMount(async () => {
@@ -245,7 +245,7 @@
 					console.log(savedPrompts);
 
 					for (const prompt of savedPrompts) {
-						await createNewPrompt(localStorage.token, {
+						await createNewPrompt(sessionStorage.token, {
 							command: prompt.command.charAt(0) === '/' ? prompt.command.slice(1) : prompt.command,
 							title: prompt.title,
 							content: prompt.content
@@ -258,7 +258,7 @@
 					prompts = null;
 					page = 1;
 					getPromptList();
-					await _prompts.set(await getPrompts(localStorage.token));
+					await _prompts.set(await getPrompts(sessionStorage.token));
 
 					importFiles = [];
 					promptsImportInputElement.value = '';

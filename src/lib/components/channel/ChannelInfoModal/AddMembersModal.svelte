@@ -21,7 +21,7 @@
 	let loading = false;
 
 	const submitHandler = async () => {
-		const res = await addMembersById(localStorage.token, channel.id, {
+		const res = await addMembersById(sessionStorage.token, channel.id, {
 			user_ids: userIds,
 			group_ids: groupIds
 		}).catch((error) => {

@@ -28,7 +28,7 @@
 
 		let newChatList: any[] = [];
 
-		newChatList = await getChatListByFolderId(localStorage.token, folder.id, page).catch(
+		newChatList = await getChatListByFolderId(sessionStorage.token, folder.id, page).catch(
 			(error) => {
 				console.error(error);
 				return [];
@@ -49,7 +49,7 @@
 		chatListLoading = false;
 
 		if (folder && folder.id) {
-			const res = await getChatListByFolderId(localStorage.token, folder.id, page);
+			const res = await getChatListByFolderId(sessionStorage.token, folder.id, page);
 
 			if (res) {
 				chats = res;

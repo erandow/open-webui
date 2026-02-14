@@ -150,7 +150,7 @@
 		}
 
 		const res = await searchKnowledgeFilesById(
-			localStorage.token,
+			sessionStorage.token,
 			knowledge.id,
 			query,
 			viewOption,
@@ -208,7 +208,7 @@
 		for (const fileItem of newFileItems) {
 			try {
 				console.log(fileItem);
-				const res = await processWeb(localStorage.token, '', fileItem.url, false).catch((e) => {
+				const res = await processWeb(sessionStorage.token, '', fileItem.url, false).catch((e) => {
 					console.error('Error processing web URL:', e);
 					return null;
 				});
@@ -224,7 +224,7 @@
 						res.content
 					);
 
-					const uploadedFile = await uploadFile(localStorage.token, file).catch((e) => {
+					const uploadedFile = await uploadFile(sessionStorage.token, file).catch((e) => {
 						toast.error(`${e}`);
 						return null;
 					});
@@ -310,7 +310,7 @@
 					: {})
 			};
 
-			const uploadedFile = await uploadFile(localStorage.token, file, metadata).catch((e) => {
+			const uploadedFile = await uploadFile(sessionStorage.token, file, metadata).catch((e) => {
 				toast.error(`${e}`);
 				return null;
 			});
@@ -514,7 +514,7 @@
 	// Helper function to maintain file paths within zip
 	const syncDirectoryHandler = async () => {
 		if (fileItems.length > 0) {
-			const res = await resetKnowledgeById(localStorage.token, id).catch((e) => {
+			const res = await resetKnowledgeById(sessionStorage.token, id).catch((e) => {
 				toast.error(`${e}`);
 			});
 
@@ -531,7 +531,7 @@
 	};
 
 	const addFileHandler = async (fileId) => {
-		const res = await addFileToKnowledgeById(localStorage.token, id, fileId).catch((e) => {
+		const res = await addFileToKnowledgeById(sessionStorage.token, id, fileId).catch((e) => {
 			toast.error(`${e}`);
 			return null;
 		});
@@ -550,7 +550,7 @@
 			console.log('Starting file deletion process for:', fileId);
 
 			// Remove from knowledge base only
-			const res = await removeFileFromKnowledgeById(localStorage.token, id, fileId);
+			const res = await removeFileFromKnowledgeById(sessionStorage.token, id, fileId);
 			console.log('Knowledge base updated:', res);
 
 			if (res) {
@@ -579,7 +579,7 @@
 
 		try {
 			const res = await updateFileDataContentById(
-				localStorage.token,
+				sessionStorage.token,
 				selectedFile.id,
 				selectedFileContent
 			).catch((e) => {
@@ -613,7 +613,7 @@
 				return;
 			}
 
-			const res = await updateKnowledgeById(localStorage.token, id, {
+			const res = await updateKnowledgeById(sessionStorage.token, id, {
 				...knowledge,
 				name: knowledge.name,
 				description: knowledge.description,
@@ -741,7 +741,7 @@
 		}
 
 		id = $page.params.id;
-		const res = await getKnowledgeById(localStorage.token, id).catch((e) => {
+		const res = await getKnowledgeById(sessionStorage.token, id).catch((e) => {
 			toast.error(`${e}`);
 			return null;
 		});
@@ -841,7 +841,7 @@
 				knowledge?.write_access}
 			onChange={async () => {
 				try {
-					await updateKnowledgeAccessGrants(localStorage.token, id, knowledge.access_grants ?? []);
+					await updateKnowledgeAccessGrants(sessionStorage.token, id, knowledge.access_grants ?? []);
 					toast.success($i18n.t('Saved'));
 				} catch (error) {
 					toast.error(`${error}`);

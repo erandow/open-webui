@@ -22,7 +22,7 @@
 		const chatId = event.data?.data?.id ?? event.data?.id;
 		if (event.data?.type === 'verify:chat' && chatId) {
 			try {
-				const res = await exportSingleChatStats(localStorage.token, chatId);
+				const res = await exportSingleChatStats(sessionStorage.token, chatId);
 				if (res && window.opener) {
 					window.opener.postMessage(
 						{
@@ -141,7 +141,7 @@
 
 		try {
 			// Get version info
-			const versionRes = await getVersion(localStorage.token).catch((err) => {
+			const versionRes = await getVersion(sessionStorage.token).catch((err) => {
 				console.error('Failed to get version:', err);
 				return null;
 			});
@@ -161,7 +161,7 @@
 					searchParams.updated_at = eventData.lastSyncedChatUpdatedAt;
 				}
 
-				const res = await exportChatStats(localStorage.token, page, searchParams).catch((err) => {
+				const res = await exportChatStats(sessionStorage.token, page, searchParams).catch((err) => {
 					throw new Error(err?.detail || err?.message || 'Failed to export chat stats');
 				});
 
@@ -211,7 +211,7 @@
 
 		try {
 			// Get total count first (no filters for download - get all)
-			const initialRes = await exportChatStats(localStorage.token, 1, {}).catch(() => null);
+			const initialRes = await exportChatStats(sessionStorage.token, 1, {}).catch(() => null);
 
 			if (initialRes?.total) {
 				total = initialRes.total;
@@ -221,14 +221,14 @@
 			await tick();
 
 			// Get version for filename
-			const versionRes = await getVersion(localStorage.token).catch(() => null);
+			const versionRes = await getVersion(sessionStorage.token).catch(() => null);
 			const version = versionRes?.version ?? '0.0.0';
 			const filename = `open-webui-stats-${version}-${Date.now()}.json`;
 
 			// Start streaming download
 			const searchParams = eventData?.searchParams ?? {};
 			const [res, controller] = await downloadChatStats(
-				localStorage.token,
+				sessionStorage.token,
 				searchParams.updated_at
 			).catch((err) => {
 				throw new Error(

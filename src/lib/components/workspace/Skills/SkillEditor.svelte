@@ -117,7 +117,7 @@
 	onChange={async () => {
 		if (edit && skill?.id) {
 			try {
-				await updateSkillAccessGrants(localStorage.token, skill.id, accessGrants);
+				await updateSkillAccessGrants(sessionStorage.token, skill.id, accessGrants);
 				toast.success($i18n.t('Saved'));
 			} catch (error) {
 				toast.error(`${error}`);

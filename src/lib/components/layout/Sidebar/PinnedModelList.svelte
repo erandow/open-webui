@@ -29,7 +29,7 @@
 					pinnedModels.splice(newIndex, 0, modelId);
 
 					settings.set({ ...$settings, pinnedModels: pinnedModels });
-					await updateUserSettings(localStorage.token, { ui: $settings });
+					await updateUserSettings(sessionStorage.token, { ui: $settings });
 				}
 			});
 		}
@@ -45,7 +45,7 @@
 			pinnedModels = defaultPinnedModels.filter((id) => $models.find((model) => model.id === id));
 
 			settings.set({ ...$settings, pinnedModels });
-			await updateUserSettings(localStorage.token, { ui: $settings });
+			await updateUserSettings(sessionStorage.token, { ui: $settings });
 		}
 
 		unsubscribeSettings = settings.subscribe((value) => {
@@ -81,7 +81,7 @@
 					? () => {
 							const pinnedModels = $settings.pinnedModels.filter((id) => id !== modelId);
 							settings.set({ ...$settings, pinnedModels });
-							updateUserSettings(localStorage.token, { ui: $settings });
+							updateUserSettings(sessionStorage.token, { ui: $settings });
 						}
 					: null}
 			/>

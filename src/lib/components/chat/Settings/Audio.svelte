@@ -60,7 +60,7 @@
 					}
 				}, 100);
 			} else {
-				const res = await _getVoices(localStorage.token).catch((e) => {
+				const res = await _getVoices(sessionStorage.token).catch((e) => {
 					toast.error(`${e}`);
 				});
 

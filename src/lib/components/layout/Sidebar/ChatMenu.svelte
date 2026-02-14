@@ -50,12 +50,12 @@
 	let showFullMessages = false;
 
 	const pinHandler = async () => {
-		await toggleChatPinnedStatusById(localStorage.token, chatId);
+		await toggleChatPinnedStatusById(sessionStorage.token, chatId);
 		dispatch('change');
 	};
 
 	const checkPinned = async () => {
-		pinned = await getChatPinnedStatusById(localStorage.token, chatId);
+		pinned = await getChatPinnedStatusById(sessionStorage.token, chatId);
 	};
 
 	const getChatAsText = async (chat) => {
@@ -69,7 +69,7 @@
 	};
 
 	const downloadTxt = async () => {
-		const chat = await getChatById(localStorage.token, chatId);
+		const chat = await getChatById(sessionStorage.token, chatId);
 		if (!chat) {
 			return;
 		}
@@ -83,7 +83,7 @@
 	};
 
 	const downloadPdf = async () => {
-		chat = await getChatById(localStorage.token, chatId);
+		chat = await getChatById(sessionStorage.token, chatId);
 		if (!chat) {
 			return;
 		}
@@ -244,7 +244,7 @@
 	};
 
 	const downloadJSONExport = async () => {
-		const chat = await getChatById(localStorage.token, chatId);
+		const chat = await getChatById(sessionStorage.token, chatId);
 
 		if (chat) {
 			let blob = new Blob([JSON.stringify([chat])], {

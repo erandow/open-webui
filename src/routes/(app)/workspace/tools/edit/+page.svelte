@@ -32,7 +32,7 @@
 			return;
 		}
 
-		const res = await updateToolById(localStorage.token, tool.id, {
+		const res = await updateToolById(sessionStorage.token, tool.id, {
 			id: data.id,
 			name: data.name,
 			meta: data.meta,
@@ -45,7 +45,7 @@
 
 		if (res) {
 			toast.success($i18n.t('Tool updated successfully'));
-			tools.set(await getTools(localStorage.token));
+			tools.set(await getTools(sessionStorage.token));
 
 			// await goto('/workspace/tools');
 		}
@@ -56,7 +56,7 @@
 		const id = $page.url.searchParams.get('id');
 
 		if (id) {
-			const res = await getToolById(localStorage.token, id).catch((error) => {
+			const res = await getToolById(sessionStorage.token, id).catch((error) => {
 				toast.error(`${error}`);
 				goto('/workspace/tools');
 				return null;

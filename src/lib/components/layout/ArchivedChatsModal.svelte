@@ -60,10 +60,10 @@
 		chatList = null;
 
 		if (query === '') {
-			chatList = await getArchivedChatList(localStorage.token, page, filter);
+			chatList = await getArchivedChatList(sessionStorage.token, page, filter);
 		} else {
 			searchDebounceTimeout = setTimeout(async () => {
-				chatList = await getArchivedChatList(localStorage.token, page, filter);
+				chatList = await getArchivedChatList(sessionStorage.token, page, filter);
 			}, 500);
 		}
 
@@ -81,9 +81,9 @@
 		let newChatList = [];
 
 		if (query) {
-			newChatList = await getArchivedChatList(localStorage.token, page, filter);
+			newChatList = await getArchivedChatList(sessionStorage.token, page, filter);
 		} else {
-			newChatList = await getArchivedChatList(localStorage.token, page, filter);
+			newChatList = await getArchivedChatList(sessionStorage.token, page, filter);
 		}
 
 		// once the bottom of the list has been reached (no results) there is no need to continue querying
@@ -97,7 +97,7 @@
 	};
 
 	const exportChatsHandler = async () => {
-		const chats = await getAllArchivedChats(localStorage.token);
+		const chats = await getAllArchivedChats(sessionStorage.token);
 		let blob = new Blob([JSON.stringify(chats)], {
 			type: 'application/json'
 		});
@@ -105,7 +105,7 @@
 	};
 
 	const unarchiveHandler = async (chatId: string) => {
-		const res = await archiveChatById(localStorage.token, chatId).catch((error) => {
+		const res = await archiveChatById(sessionStorage.token, chatId).catch((error) => {
 			toast.error(`${error}`);
 		});
 
@@ -116,7 +116,7 @@
 	const unarchiveAllHandler = async () => {
 		loading = true;
 		try {
-			await unarchiveAllChats(localStorage.token);
+			await unarchiveAllChats(sessionStorage.token);
 			toast.success($i18n.t('All chats have been unarchived.'));
 			onUpdate();
 			await init();
@@ -128,7 +128,7 @@
 	};
 
 	const init = async () => {
-		chatList = await getArchivedChatList(localStorage.token);
+		chatList = await getArchivedChatList(sessionStorage.token);
 	};
 
 	$: if (show) {

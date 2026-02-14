@@ -100,7 +100,7 @@
 			.sort((a, b) => a.type.localeCompare(b.type) || a.name.localeCompare(b.name));
 	};
 	const shareHandler = async (func) => {
-		const item = await getFunctionById(localStorage.token, func.id).catch((error) => {
+		const item = await getFunctionById(sessionStorage.token, func.id).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -127,7 +127,7 @@
 	};
 
 	const cloneHandler = async (func) => {
-		const _function = await getFunctionById(localStorage.token, func.id).catch((error) => {
+		const _function = await getFunctionById(sessionStorage.token, func.id).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -143,7 +143,7 @@
 	};
 
 	const exportHandler = async (func) => {
-		const _function = await getFunctionById(localStorage.token, func.id).catch((error) => {
+		const _function = await getFunctionById(sessionStorage.token, func.id).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -157,7 +157,7 @@
 	};
 
 	const deleteHandler = async (func) => {
-		const res = await deleteFunctionById(localStorage.token, func.id).catch((error) => {
+		const res = await deleteFunctionById(sessionStorage.token, func.id).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -166,10 +166,10 @@
 			toast.success($i18n.t('Function deleted successfully'));
 			functions = functions.filter((f) => f.id !== func.id);
 
-			_functions.set(await getFunctions(localStorage.token));
+			_functions.set(await getFunctions(sessionStorage.token));
 			models.set(
 				await getModels(
-					localStorage.token,
+					sessionStorage.token,
 					$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null),
 					false,
 					true
@@ -179,7 +179,7 @@
 	};
 
 	const toggleGlobalHandler = async (func) => {
-		const res = await toggleGlobalById(localStorage.token, func.id).catch((error) => {
+		const res = await toggleGlobalById(sessionStorage.token, func.id).catch((error) => {
 			toast.error(`${error}`);
 		});
 
@@ -194,10 +194,10 @@
 					: toast.success($i18n.t('Function is now globally disabled'));
 			}
 
-			_functions.set(await getFunctions(localStorage.token));
+			_functions.set(await getFunctions(sessionStorage.token));
 			models.set(
 				await getModels(
-					localStorage.token,
+					sessionStorage.token,
 					$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null),
 					false,
 					true
@@ -208,7 +208,7 @@
 
 	onMount(async () => {
 		viewOption = localStorage?.workspaceViewOption || '';
-		functions = await getFunctionList(localStorage.token).catch((error) => {
+		functions = await getFunctionList(sessionStorage.token).catch((error) => {
 			toast.error(`${error}`);
 			return [];
 		});
@@ -257,7 +257,7 @@
 <ImportModal
 	bind:show={showImportModal}
 	loadUrlHandler={async (url) => {
-		return await loadFunctionByUrl(localStorage.token, url);
+		return await loadFunctionByUrl(sessionStorage.token, url);
 	}}
 	onImport={(func) => {
 		sessionStorage.function = JSON.stringify({
@@ -312,7 +312,7 @@
 								<button
 									class="flex text-xs items-center space-x-1 px-3 py-1.5 rounded-xl bg-gray-50 hover:bg-gray-100 dark:bg-gray-850 dark:hover:bg-gray-800 dark:text-gray-200 transition"
 									on:click={async () => {
-										const _functions = await exportFunctions(localStorage.token).catch((error) => {
+										const _functions = await exportFunctions(sessionStorage.token).catch((error) => {
 											toast.error(`${error}`);
 											return null;
 										});
@@ -565,10 +565,10 @@
 										<Switch
 											bind:state={func.is_active}
 											on:change={async (e) => {
-												toggleFunctionById(localStorage.token, func.id);
+												toggleFunctionById(sessionStorage.token, func.id);
 												models.set(
 													await getModels(
-														localStorage.token,
+														sessionStorage.token,
 														$config?.features?.enable_direct_connections &&
 															($settings?.directConnections ?? null),
 														false,
@@ -651,7 +651,7 @@
 			await tick();
 			models.set(
 				await getModels(
-					localStorage.token,
+					sessionStorage.token,
 					$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null),
 					false,
 					true
@@ -674,17 +674,17 @@
 						func = func.function;
 					}
 
-					const res = await createNewFunction(localStorage.token, func).catch((error) => {
+					const res = await createNewFunction(sessionStorage.token, func).catch((error) => {
 						toast.error(`${error}`);
 						return null;
 					});
 				}
 
 				toast.success($i18n.t('Functions imported successfully'));
-				functions.set(await getFunctions(localStorage.token));
+				functions.set(await getFunctions(sessionStorage.token));
 				models.set(
 					await getModels(
-						localStorage.token,
+						sessionStorage.token,
 						$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null),
 						false,
 						true

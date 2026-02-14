@@ -89,7 +89,7 @@
 	};
 
 	const deleteNoteHandler = async (id) => {
-		const res = await deleteNoteById(localStorage.token, id).catch((error) => {
+		const res = await deleteNoteById(sessionStorage.token, id).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -119,7 +119,7 @@
 				}
 
 				// Create a new note with the content
-				const res = await createNewNote(localStorage.token, {
+				const res = await createNewNote(sessionStorage.token, {
 					title: name,
 					data: {
 						content: {
@@ -185,7 +185,7 @@
 		}
 
 		const res = await searchNotes(
-			localStorage.token,
+			sessionStorage.token,
 			query,
 			viewOption,
 			permission,

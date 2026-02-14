@@ -220,7 +220,7 @@
 			text = text.replaceAll('{{USER_LOCATION}}', String(location));
 		}
 
-		const sessionUser = await getSessionUser(localStorage.token);
+		const sessionUser = await getSessionUser(sessionStorage.token);
 
 		if (text.includes('{{USER_NAME}}')) {
 			const name = sessionUser?.name || 'User';
@@ -594,7 +594,7 @@
 				}
 
 				// During the file upload, file content is automatically extracted.
-				const uploadedFile = await uploadFile(localStorage.token, file, metadata, process);
+				const uploadedFile = await uploadFile(sessionStorage.token, file, metadata, process);
 
 				if (uploadedFile) {
 					console.log('File upload completed:', {
@@ -980,7 +980,7 @@
 		dropzoneElement?.addEventListener('drop', onDrop);
 		dropzoneElement?.addEventListener('dragleave', onDragLeave);
 
-		await tools.set(await getTools(localStorage.token));
+		await tools.set(await getTools(sessionStorage.token));
 	});
 
 	onDestroy(() => {
@@ -1347,7 +1347,7 @@
 														}
 
 														const res = await generateAutoCompletion(
-															localStorage.token,
+															sessionStorage.token,
 															selectedModelIds.at(0),
 															text,
 															history?.currentId

@@ -140,7 +140,7 @@
 			text = text.replaceAll('{{USER_LOCATION}}', String(location));
 		}
 
-		const sessionUser = await getSessionUser(localStorage.token);
+		const sessionUser = await getSessionUser(sessionStorage.token);
 
 		if (text.includes('{{USER_NAME}}')) {
 			const name = sessionUser?.name || 'User';
@@ -472,7 +472,7 @@
 					: {})
 			};
 
-			const uploadedFile = await uploadFile(localStorage.token, file, metadata, process);
+			const uploadedFile = await uploadFile(sessionStorage.token, file, metadata, process);
 
 			if (uploadedFile) {
 				console.info('File upload completed:', {

@@ -243,8 +243,8 @@
 	};
 
 	onMount(async () => {
-		await tools.set(await getTools(localStorage.token));
-		await functions.set(await getFunctions(localStorage.token));
+		await tools.set(await getTools(sessionStorage.token));
+		await functions.set(await getFunctions(sessionStorage.token));
 
 		// Scroll to top 'workspace-container' element
 		const workspaceContainer = document.getElementById('workspace-container');
@@ -346,7 +346,7 @@
 		onChange={async () => {
 			if (edit && model?.id) {
 				try {
-					await updateModelAccessGrants(localStorage.token, model.id, accessGrants);
+					await updateModelAccessGrants(sessionStorage.token, model.id, accessGrants);
 					toast.success($i18n.t('Saved'));
 				} catch (error) {
 					toast.error(`${error}`);

@@ -67,7 +67,7 @@
 
 	const loadMessageData = async () => {
 		if (message && message?.data) {
-			const res = await getMessageData(localStorage.token, channel?.id, message.id);
+			const res = await getMessageData(sessionStorage.token, channel?.id, message.id);
 			if (res) {
 				message.data = res;
 			}

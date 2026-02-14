@@ -19,14 +19,14 @@
 
 	const onSubmit = async (_prompt) => {
 		console.log(_prompt);
-		const updatedPrompt = await updatePromptById(localStorage.token, _prompt).catch((error) => {
+		const updatedPrompt = await updatePromptById(sessionStorage.token, _prompt).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
 
 		if (updatedPrompt) {
 			toast.success($i18n.t('Prompt updated successfully'));
-			await prompts.set(await getPrompts(localStorage.token));
+			await prompts.set(await getPrompts(sessionStorage.token));
 			// Update local prompt state to reflect the new version
 			prompt = {
 				id: updatedPrompt.id,
@@ -43,7 +43,7 @@
 
 	onMount(async () => {
 		if (promptId) {
-			const _prompt = await getPromptById(localStorage.token, promptId).catch((error) => {
+			const _prompt = await getPromptById(sessionStorage.token, promptId).catch((error) => {
 				toast.error(`${error}`);
 				return null;
 			});

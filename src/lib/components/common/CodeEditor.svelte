@@ -203,7 +203,7 @@ print("${endTag}")
 		if (codeEditor) {
 			const res = await (
 				$user?.role === 'admin'
-					? formatPythonCode(localStorage.token, _value)
+					? formatPythonCode(sessionStorage.token, _value)
 					: formatPythonCodePyodide(_value)
 			).catch((error) => {
 				toast.error(`${error}`);

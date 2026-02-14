@@ -109,7 +109,7 @@ export const downloadPdf = async (note) => {
 
 export const createNoteHandler = async (title: string, md?: string, html?: string) => {
 	//  $i18n.t('New Note'),
-	const res = await createNewNote(localStorage.token, {
+	const res = await createNewNote(sessionStorage.token, {
 		// YYYY-MM-DD
 		title: title,
 		data: {

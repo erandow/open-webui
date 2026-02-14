@@ -16,7 +16,7 @@
 	let user = null;
 	onMount(async () => {
 		if (id) {
-			user = await getUserInfoById(localStorage.token, id).catch((error) => {
+			user = await getUserInfoById(sessionStorage.token, id).catch((error) => {
 				console.error('Error fetching user by ID:', error);
 				return null;
 			});

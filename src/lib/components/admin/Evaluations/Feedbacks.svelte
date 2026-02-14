@@ -64,7 +64,7 @@
 
 	const getFeedbacks = async () => {
 		try {
-			const res = await getFeedbackItems(localStorage.token, orderBy, direction, page).catch(
+			const res = await getFeedbackItems(sessionStorage.token, orderBy, direction, page).catch(
 				(error) => {
 					toast.error(`${error}`);
 					return null;
@@ -85,7 +85,7 @@
 	}
 
 	const deleteFeedbackHandler = async (feedbackId: string) => {
-		const response = await deleteFeedbackById(localStorage.token, feedbackId).catch((err) => {
+		const response = await deleteFeedbackById(sessionStorage.token, feedbackId).catch((err) => {
 			toast.error(err);
 			return null;
 		});
@@ -124,7 +124,7 @@
 	};
 
 	const exportHandler = async () => {
-		const _feedbacks = await exportAllFeedbacks(localStorage.token).catch((err) => {
+		const _feedbacks = await exportAllFeedbacks(sessionStorage.token).catch((err) => {
 			toast.error(err);
 			return null;
 		});

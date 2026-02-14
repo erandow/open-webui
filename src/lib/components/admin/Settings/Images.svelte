@@ -92,7 +92,7 @@
 	];
 
 	const getModels = async () => {
-		models = await getImageGenerationModels(localStorage.token).catch((error) => {
+		models = await getImageGenerationModels(sessionStorage.token).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -124,7 +124,7 @@
 			return null;
 		}
 
-		const res = await updateConfig(localStorage.token, {
+		const res = await updateConfig(sessionStorage.token, {
 			...config,
 			AUTOMATIC1111_PARAMS:
 				typeof config.AUTOMATIC1111_PARAMS === 'string' && config.AUTOMATIC1111_PARAMS.trim() !== ''
@@ -210,7 +210,7 @@
 
 	onMount(async () => {
 		if ($user?.role === 'admin') {
-			const res = await getConfig(localStorage.token).catch((error) => {
+			const res = await getConfig(sessionStorage.token).catch((error) => {
 				toast.error(`${error}`);
 				return null;
 			});
@@ -518,7 +518,7 @@
 										aria-label="verify connection"
 										on:click={async () => {
 											await updateConfigHandler();
-											const res = await verifyConfigUrl(localStorage.token).catch((error) => {
+											const res = await verifyConfigUrl(sessionStorage.token).catch((error) => {
 												toast.error(`${error}`);
 												return null;
 											});
@@ -632,7 +632,7 @@
 										aria-label="verify connection"
 										on:click={async () => {
 											await updateConfigHandler();
-											const res = await verifyConfigUrl(localStorage.token).catch((error) => {
+											const res = await verifyConfigUrl(sessionStorage.token).catch((error) => {
 												toast.error(`${error}`);
 												return null;
 											});
@@ -1045,7 +1045,7 @@
 										aria-label="verify connection"
 										on:click={async () => {
 											await updateConfigHandler();
-											const res = await verifyConfigUrl(localStorage.token).catch((error) => {
+											const res = await verifyConfigUrl(sessionStorage.token).catch((error) => {
 												toast.error(`${error}`);
 												return null;
 											});

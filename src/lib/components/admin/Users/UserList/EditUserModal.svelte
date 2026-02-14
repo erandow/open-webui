@@ -45,7 +45,7 @@
 	let userGroups: any[] | null = null;
 
 	const submitHandler = async () => {
-		const res = await updateUserById(localStorage.token, selectedUser.id, _user).catch((error) => {
+		const res = await updateUserById(sessionStorage.token, selectedUser.id, _user).catch((error) => {
 			toast.error(`${error}`);
 		});
 
@@ -59,7 +59,7 @@
 		if (!selectedUser?.id) return;
 		userGroups = null;
 
-		userGroups = await getUserGroupsById(localStorage.token, selectedUser.id).catch((error) => {
+		userGroups = await getUserGroupsById(sessionStorage.token, selectedUser.id).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});

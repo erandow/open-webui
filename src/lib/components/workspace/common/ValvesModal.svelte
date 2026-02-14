@@ -67,11 +67,11 @@
 
 			if (userValves) {
 				if (type === 'tool') {
-					res = await updateToolUserValvesById(localStorage.token, id, valves).catch((error) => {
+					res = await updateToolUserValvesById(sessionStorage.token, id, valves).catch((error) => {
 						toast.error(`${error}`);
 					});
 				} else if (type === 'function') {
-					res = await updateFunctionUserValvesById(localStorage.token, id, valves).catch(
+					res = await updateFunctionUserValvesById(sessionStorage.token, id, valves).catch(
 						(error) => {
 							toast.error(`${error}`);
 						}
@@ -79,11 +79,11 @@
 				}
 			} else {
 				if (type === 'tool') {
-					res = await updateToolValvesById(localStorage.token, id, valves).catch((error) => {
+					res = await updateToolValvesById(sessionStorage.token, id, valves).catch((error) => {
 						toast.error(`${error}`);
 					});
 				} else if (type === 'function') {
-					res = await updateFunctionValvesById(localStorage.token, id, valves).catch((error) => {
+					res = await updateFunctionValvesById(sessionStorage.token, id, valves).catch((error) => {
 						toast.error(`${error}`);
 					});
 				}
@@ -106,19 +106,19 @@
 		try {
 			if (userValves) {
 				if (type === 'tool') {
-					valves = await getToolUserValvesById(localStorage.token, id);
-					valvesSpec = await getToolUserValvesSpecById(localStorage.token, id);
+					valves = await getToolUserValvesById(sessionStorage.token, id);
+					valvesSpec = await getToolUserValvesSpecById(sessionStorage.token, id);
 				} else if (type === 'function') {
-					valves = await getFunctionUserValvesById(localStorage.token, id);
-					valvesSpec = await getFunctionUserValvesSpecById(localStorage.token, id);
+					valves = await getFunctionUserValvesById(sessionStorage.token, id);
+					valvesSpec = await getFunctionUserValvesSpecById(sessionStorage.token, id);
 				}
 			} else {
 				if (type === 'tool') {
-					valves = await getToolValvesById(localStorage.token, id);
-					valvesSpec = await getToolValvesSpecById(localStorage.token, id);
+					valves = await getToolValvesById(sessionStorage.token, id);
+					valvesSpec = await getToolValvesSpecById(sessionStorage.token, id);
 				} else if (type === 'function') {
-					valves = await getFunctionValvesById(localStorage.token, id);
-					valvesSpec = await getFunctionValvesSpecById(localStorage.token, id);
+					valves = await getFunctionValvesById(sessionStorage.token, id);
+					valvesSpec = await getFunctionValvesSpecById(sessionStorage.token, id);
 				}
 			}
 

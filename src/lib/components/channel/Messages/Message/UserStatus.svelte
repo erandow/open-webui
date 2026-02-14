@@ -21,7 +21,7 @@
 			return;
 		}
 
-		const res = await getDMChannelByUserId(localStorage.token, user.id).catch((error) => {
+		const res = await getDMChannelByUserId(sessionStorage.token, user.id).catch((error) => {
 			console.error('Error fetching DM channel:', error);
 			return null;
 		});

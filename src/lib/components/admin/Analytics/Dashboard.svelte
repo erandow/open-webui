@@ -100,11 +100,11 @@
 			const { start, end } = getDateRange(selectedPeriod);
 			const granularity = selectedPeriod === '24h' ? 'hourly' : 'daily';
 			const [summaryRes, modelsRes, usersRes, dailyRes, tokensRes] = await Promise.all([
-				getSummary(localStorage.token, start, end, selectedGroupId),
-				getModelAnalytics(localStorage.token, start, end, selectedGroupId),
-				getUserAnalytics(localStorage.token, start, end, 50, selectedGroupId),
-				getDailyStats(localStorage.token, start, end, granularity, selectedGroupId),
-				getTokenUsage(localStorage.token, start, end, selectedGroupId)
+				getSummary(sessionStorage.token, start, end, selectedGroupId),
+				getModelAnalytics(sessionStorage.token, start, end, selectedGroupId),
+				getUserAnalytics(sessionStorage.token, start, end, 50, selectedGroupId),
+				getDailyStats(sessionStorage.token, start, end, granularity, selectedGroupId),
+				getTokenUsage(sessionStorage.token, start, end, selectedGroupId)
 			]);
 
 			summary = summaryRes ?? summary;
@@ -147,7 +147,7 @@
 	onMount(async () => {
 		// Load groups for filter
 		try {
-			const res = await getGroups(localStorage.token);
+			const res = await getGroups(sessionStorage.token);
 			groups = res ?? [];
 		} catch (e) {
 			console.error('Failed to load groups:', e);

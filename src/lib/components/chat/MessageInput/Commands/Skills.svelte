@@ -26,7 +26,7 @@
 	});
 
 	const getItems = async () => {
-		const res = await getSkillItems(localStorage.token, query).catch(() => null);
+		const res = await getSkillItems(sessionStorage.token, query).catch(() => null);
 		if (res) {
 			filteredItems = res.items;
 		}

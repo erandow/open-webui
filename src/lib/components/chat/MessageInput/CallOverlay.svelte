@@ -155,7 +155,7 @@
 		const file = blobToFile(audioBlob, 'recording.wav');
 
 		const res = await transcribeAudio(
-			localStorage.token,
+			sessionStorage.token,
 			file,
 			$settings?.audio?.stt?.language
 		).catch((error) => {
@@ -470,7 +470,7 @@
 			try {
 				// Set the emoji for the content if needed
 				if ($settings?.showEmojiInCall ?? false) {
-					const emoji = await generateEmoji(localStorage.token, modelId, content, chatId);
+					const emoji = await generateEmoji(sessionStorage.token, modelId, content, chatId);
 					if (emoji) {
 						emojiCache.set(content, emoji);
 					}
@@ -491,7 +491,7 @@
 						audioCache.set(content, new Audio(url));
 					}
 				} else if ($config.audio.tts.engine !== '') {
-					const res = await synthesizeOpenAISpeech(localStorage.token, getVoiceId(), content).catch(
+					const res = await synthesizeOpenAISpeech(sessionStorage.token, getVoiceId(), content).catch(
 						(error) => {
 							console.error(error);
 							return null;

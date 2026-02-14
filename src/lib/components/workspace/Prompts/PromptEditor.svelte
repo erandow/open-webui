@@ -127,7 +127,7 @@
 		}
 
 		try {
-			const newEntries = await getPromptHistory(localStorage.token, prompt.id, historyPage);
+			const newEntries = await getPromptHistory(sessionStorage.token, prompt.id, historyPage);
 
 			if (reset) {
 				history = newEntries;
@@ -172,7 +172,7 @@
 		}
 
 		try {
-			await setProductionPromptVersion(localStorage.token, prompt.id, historyEntry.id);
+			await setProductionPromptVersion(sessionStorage.token, prompt.id, historyEntry.id);
 			// Update local prompt object to trigger reactivity
 			prompt = { ...prompt, version_id: historyEntry.id };
 			toast.success($i18n.t('Production version updated'));
@@ -185,7 +185,7 @@
 		if (disabled) return;
 
 		try {
-			await deletePromptHistoryVersion(localStorage.token, prompt.id, historyId);
+			await deletePromptHistoryVersion(sessionStorage.token, prompt.id, historyId);
 			toast.success($i18n.t('Version deleted'));
 			// Reload history from scratch
 			await loadHistory(true);
@@ -224,7 +224,7 @@
 
 			try {
 				await updatePromptMetadata(
-					localStorage.token,
+					sessionStorage.token,
 					prompt?.id,
 					name,
 					command,
@@ -270,7 +270,7 @@
 			}
 		}
 
-		const res = await getPromptTags(localStorage.token);
+		const res = await getPromptTags(sessionStorage.token);
 		if (res) {
 			suggestionTags = res.map((tag) => ({ name: tag }));
 		}
@@ -286,7 +286,7 @@
 	onChange={async () => {
 		if (edit && prompt?.id) {
 			try {
-				await updatePromptAccessGrants(localStorage.token, prompt.id, accessGrants);
+				await updatePromptAccessGrants(sessionStorage.token, prompt.id, accessGrants);
 				toast.success($i18n.t('Saved'));
 			} catch (error) {
 				toast.error(`${error}`);

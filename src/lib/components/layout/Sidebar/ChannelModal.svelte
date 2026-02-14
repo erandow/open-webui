@@ -113,7 +113,7 @@
 
 		const channelId = channel.id;
 
-		const res = await deleteChannelById(localStorage.token, channelId).catch((error) => {
+		const res = await deleteChannelById(sessionStorage.token, channelId).catch((error) => {
 			toast.error(error.message);
 		});
 

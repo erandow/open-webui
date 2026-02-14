@@ -83,7 +83,7 @@
 	};
 
 	const setUserSettings = async (cb: () => Promise<void>) => {
-		let userSettings = await getUserSettings(localStorage.token).catch((error) => {
+		let userSettings = await getUserSettings(sessionStorage.token).catch((error) => {
 			console.error(error);
 			return null;
 		});
@@ -109,7 +109,7 @@
 	const setModels = async () => {
 		models.set(
 			await getModels(
-				localStorage.token,
+				sessionStorage.token,
 				$config?.features?.enable_direct_connections ? ($settings?.directConnections ?? null) : null
 			)
 		);
@@ -132,12 +132,12 @@
 	};
 
 	const setBanners = async () => {
-		const bannersData = await getBanners(localStorage.token);
+		const bannersData = await getBanners(sessionStorage.token);
 		banners.set(bannersData);
 	};
 
 	const setTools = async () => {
-		const toolsData = await getTools(localStorage.token);
+		const toolsData = await getTools(sessionStorage.token);
 		tools.set(toolsData);
 	};
 
@@ -296,7 +296,7 @@
 	});
 
 	const checkForVersionUpdates = async () => {
-		version = await getVersionUpdates(localStorage.token).catch((error) => {
+		version = await getVersionUpdates(sessionStorage.token).catch((error) => {
 			return {
 				current: WEBUI_VERSION,
 				latest: WEBUI_VERSION

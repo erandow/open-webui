@@ -40,7 +40,7 @@
 		const model = $models.find((model) => model.id === selectedModelId);
 
 		const [res, controller] = await chatCompletion(
-			localStorage.token,
+			sessionStorage.token,
 			{
 				model: model.id,
 				stream: true,

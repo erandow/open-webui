@@ -67,7 +67,7 @@
 
 	const importChatsHandler = async (_chats) => {
 		const res = await importChats(
-			localStorage.token,
+			sessionStorage.token,
 			_chats.map((chat) => {
 				if (chat.chat) {
 					return {
@@ -96,13 +96,13 @@
 		}
 
 		currentChatPage.set(1);
-		await chats.set(await getChatList(localStorage.token, $currentChatPage));
-		pinnedChats.set(await getPinnedChatList(localStorage.token));
+		await chats.set(await getChatList(sessionStorage.token, $currentChatPage));
+		pinnedChats.set(await getPinnedChatList(sessionStorage.token));
 		scrollPaginationEnabled.set(true);
 	};
 
 	const exportChats = async () => {
-		let blob = new Blob([JSON.stringify(await getAllChats(localStorage.token))], {
+		let blob = new Blob([JSON.stringify(await getAllChats(sessionStorage.token))], {
 			type: 'application/json'
 		});
 		saveAs(blob, `chat-export-${Date.now()}.json`);
@@ -110,30 +110,30 @@
 
 	const archiveAllChatsHandler = async () => {
 		await goto('/');
-		await archiveAllChats(localStorage.token).catch((error) => {
+		await archiveAllChats(sessionStorage.token).catch((error) => {
 			toast.error(`${error}`);
 		});
 
 		currentChatPage.set(1);
-		await chats.set(await getChatList(localStorage.token, $currentChatPage));
+		await chats.set(await getChatList(sessionStorage.token, $currentChatPage));
 		pinnedChats.set([]);
 		scrollPaginationEnabled.set(true);
 	};
 
 	const deleteAllChatsHandler = async () => {
 		await goto('/');
-		await deleteAllChats(localStorage.token).catch((error) => {
+		await deleteAllChats(sessionStorage.token).catch((error) => {
 			toast.error(`${error}`);
 		});
 
 		currentChatPage.set(1);
-		await chats.set(await getChatList(localStorage.token, $currentChatPage));
+		await chats.set(await getChatList(sessionStorage.token, $currentChatPage));
 		scrollPaginationEnabled.set(true);
 	};
 
 	const handleArchivedChatsChange = async () => {
 		currentChatPage.set(1);
-		await chats.set(await getChatList(localStorage.token, $currentChatPage));
+		await chats.set(await getChatList(sessionStorage.token, $currentChatPage));
 
 		scrollPaginationEnabled.set(true);
 	};

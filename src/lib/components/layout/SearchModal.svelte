@@ -77,7 +77,7 @@
 
 		const chatId = chatList[selectedChatIdx].id;
 
-		const chat = await getChatById(localStorage.token, chatId).catch(async (error) => {
+		const chat = await getChatById(sessionStorage.token, chatId).catch(async (error) => {
 			return null;
 		});
 
@@ -122,10 +122,10 @@
 		page = 1;
 		chatList = null;
 		if (query === '') {
-			chatList = await getChatList(localStorage.token, page);
+			chatList = await getChatList(sessionStorage.token, page);
 		} else {
 			searchDebounceTimeout = setTimeout(async () => {
-				chatList = await getChatListBySearchText(localStorage.token, query, page);
+				chatList = await getChatListBySearchText(sessionStorage.token, query, page);
 
 				if ((chatList ?? []).length === 0) {
 					allChatsLoaded = true;
@@ -154,9 +154,9 @@
 		let newChatList = [];
 
 		if (query) {
-			newChatList = await getChatListBySearchText(localStorage.token, query, page);
+			newChatList = await getChatListBySearchText(sessionStorage.token, query, page);
 		} else {
-			newChatList = await getChatList(localStorage.token, page);
+			newChatList = await getChatList(sessionStorage.token, page);
 		}
 
 		// once the bottom of the list has been reached (no results) there is no need to continue querying

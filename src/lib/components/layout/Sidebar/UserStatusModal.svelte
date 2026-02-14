@@ -26,7 +26,7 @@
 
 	const submitHandler = async () => {
 		loading = true;
-		const res = await updateUserStatus(localStorage.token, {
+		const res = await updateUserStatus(sessionStorage.token, {
 			status_emoji: emoji,
 			status_message: message
 		}).catch((error) => {

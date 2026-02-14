@@ -50,17 +50,17 @@
 	let banners: Banner[] = [];
 
 	const updateInterfaceHandler = async () => {
-		taskConfig = await updateTaskConfig(localStorage.token, taskConfig);
+		taskConfig = await updateTaskConfig(sessionStorage.token, taskConfig);
 
 		promptSuggestions = promptSuggestions.filter((p) => p.content !== '');
-		promptSuggestions = await setDefaultPromptSuggestions(localStorage.token, promptSuggestions);
+		promptSuggestions = await setDefaultPromptSuggestions(sessionStorage.token, promptSuggestions);
 		await updateBanners();
 
 		await config.set(await getBackendConfig());
 	};
 
 	const updateBanners = async () => {
-		_banners.set(await setBanners(localStorage.token, banners));
+		_banners.set(await setBanners(sessionStorage.token, banners));
 	};
 
 	let workspaceModels = null;
@@ -69,12 +69,12 @@
 	let models = null;
 
 	const init = async () => {
-		taskConfig = await getTaskConfig(localStorage.token);
+		taskConfig = await getTaskConfig(sessionStorage.token);
 		promptSuggestions = $config?.default_prompt_suggestions ?? [];
-		banners = await getBanners(localStorage.token);
+		banners = await getBanners(sessionStorage.token);
 
-		workspaceModels = await getBaseModels(localStorage.token);
-		baseModels = await getModels(localStorage.token, null, false);
+		workspaceModels = await getBaseModels(sessionStorage.token);
+		baseModels = await getModels(sessionStorage.token, null, false);
 
 		models = baseModels.map((m) => {
 			const workspaceModel = workspaceModels.find((wm) => wm.id === m.id);

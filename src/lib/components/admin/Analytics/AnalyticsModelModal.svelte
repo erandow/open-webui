@@ -57,7 +57,7 @@
 		if (!model?.id) return;
 		loadingOverview = true;
 		try {
-			const result = await getModelOverview(localStorage.token, model.id, days);
+			const result = await getModelOverview(sessionStorage.token, model.id, days);
 			history = result?.history ?? [];
 			tags = result?.tags ?? [];
 		} catch (err) {
@@ -83,7 +83,7 @@
 		allChatsLoaded = false;
 		try {
 			const res = await getModelChats(
-				localStorage.token,
+				sessionStorage.token,
 				model.id,
 				startDate,
 				endDate,
@@ -113,7 +113,7 @@
 		try {
 			const skip = chatList.length;
 			const res = await getModelChats(
-				localStorage.token,
+				sessionStorage.token,
 				model.id,
 				startDate,
 				endDate,

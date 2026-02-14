@@ -30,7 +30,7 @@
 		}
 
 		if (modelInfo) {
-			const res = await createNewModel(localStorage.token, {
+			const res = await createNewModel(sessionStorage.token, {
 				...modelInfo,
 				meta: {
 					...modelInfo.meta,
@@ -49,7 +49,7 @@
 			if (res) {
 				await models.set(
 					await getModels(
-						localStorage.token,
+						sessionStorage.token,
 						$config?.features?.enable_direct_connections && ($settings?.directConnections ?? null)
 					)
 				);

@@ -54,7 +54,7 @@
 
 	const checkForVersionUpdates = async () => {
 		updateAvailable = null;
-		version = await getVersionUpdates(localStorage.token).catch((error) => {
+		version = await getVersionUpdates(sessionStorage.token).catch((error) => {
 			return {
 				current: WEBUI_VERSION,
 				latest: WEBUI_VERSION
@@ -69,7 +69,7 @@
 
 	const updateLdapServerHandler = async () => {
 		if (!ENABLE_LDAP) return;
-		const res = await updateLdapServer(localStorage.token, LDAP_SERVER).catch((error) => {
+		const res = await updateLdapServer(sessionStorage.token, LDAP_SERVER).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
@@ -79,9 +79,9 @@
 	};
 
 	const updateHandler = async () => {
-		webhookUrl = await updateWebhookUrl(localStorage.token, webhookUrl);
-		const res = await updateAdminConfig(localStorage.token, adminConfig);
-		await updateLdapConfig(localStorage.token, ENABLE_LDAP);
+		webhookUrl = await updateWebhookUrl(sessionStorage.token, webhookUrl);
+		const res = await updateAdminConfig(sessionStorage.token, adminConfig);
+		await updateLdapConfig(sessionStorage.token, ENABLE_LDAP);
 		await updateLdapServerHandler();
 
 		if (res) {
@@ -98,21 +98,21 @@
 
 		await Promise.all([
 			(async () => {
-				adminConfig = await getAdminConfig(localStorage.token);
+				adminConfig = await getAdminConfig(sessionStorage.token);
 			})(),
 
 			(async () => {
-				webhookUrl = await getWebhookUrl(localStorage.token);
+				webhookUrl = await getWebhookUrl(sessionStorage.token);
 			})(),
 			(async () => {
-				LDAP_SERVER = await getLdapServer(localStorage.token);
+				LDAP_SERVER = await getLdapServer(sessionStorage.token);
 			})(),
 			(async () => {
-				groups = await getGroups(localStorage.token);
+				groups = await getGroups(sessionStorage.token);
 			})()
 		]);
 
-		const ldapConfig = await getLdapConfig(localStorage.token);
+		const ldapConfig = await getLdapConfig(sessionStorage.token);
 		ENABLE_LDAP = ldapConfig.ENABLE_LDAP;
 	});
 </script>

@@ -21,14 +21,14 @@
 	let clone = false;
 
 	const onSubmit = async (_skill) => {
-		const res = await createNewSkill(localStorage.token, _skill).catch((error) => {
+		const res = await createNewSkill(sessionStorage.token, _skill).catch((error) => {
 			toast.error(`${error}`);
 			return null;
 		});
 
 		if (res) {
 			toast.success($i18n.t('Skill created successfully'));
-			await skills.set(await getSkills(localStorage.token));
+			await skills.set(await getSkills(sessionStorage.token));
 			await goto('/workspace/skills');
 		}
 	};

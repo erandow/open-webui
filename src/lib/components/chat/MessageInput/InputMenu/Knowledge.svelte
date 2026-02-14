@@ -56,7 +56,7 @@
 		selectedFileItemsLoading = true;
 
 		const res = await searchKnowledgeFilesById(
-			localStorage.token,
+			sessionStorage.token,
 			selectedItem.id,
 			null,
 			null,
@@ -121,7 +121,7 @@
 
 	const getItemsPage = async () => {
 		itemsLoading = true;
-		const res = await getKnowledgeBases(localStorage.token, page).catch(() => {
+		const res = await getKnowledgeBases(sessionStorage.token, page).catch(() => {
 			return null;
 		});
 

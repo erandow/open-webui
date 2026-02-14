@@ -142,7 +142,7 @@
 			class=" text-xs text-center text-gray-800 dark:text-gray-400 rounded-lg py-0.5 opacity-0 group-hover:opacity-100 transition-all"
 			type="button"
 			on:click={async () => {
-				const url = await getGravatarUrl(localStorage.token, user?.email);
+				const url = await getGravatarUrl(sessionStorage.token, user?.email);
 
 				profileImageUrl = url;
 			}}>{$i18n.t('Gravatar')}</button
