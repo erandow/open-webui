@@ -137,3 +137,118 @@ class RateLimiter:
             del store[b]
 
         return sum(store.values())
+
+
+class FailedLoginTracker:
+    """
+    Tracks failed login attempts per key (e.g. email) and enforces lockout
+    after max_attempts failures. Uses Redis with in-memory fallback.
+    """
+
+    _memory_store: Dict[str, Dict[str, int]] = {}  # key -> {count, lock_until_ts}
+
+    def __init__(
+        self,
+        redis_client,
+        max_attempts: int = 5,
+        lockout_seconds: int = 900,
+        enabled: bool = True,
+    ):
+        """
+        :param redis_client: Redis client or None
+        :param max_attempts: Number of failed attempts before lockout
+        :param lockout_seconds: How long to lock (seconds) after max_attempts
+        :param enabled: Turn on/off globally
+        """
+        self.r = redis_client
+        self.max_attempts = max_attempts
+        self.lockout_seconds = lockout_seconds
+        self.enabled = enabled
+
+    def _key(self, key: str) -> str:
+        return f"{REDIS_KEY_PREFIX}:failed_login:{key.lower()}"
+
+    def _redis_available(self) -> bool:
+        return self.r is not None
+
+    def is_locked(self, key: str) -> bool:
+        """True if this key is currently locked due to too many failed attempts."""
+        if not self.enabled:
+            return False
+        if self._redis_available():
+            try:
+                return self._is_locked_redis(key)
+            except Exception:
+                return self._is_locked_memory(key)
+        return self._is_locked_memory(key)
+
+    def record_failed(self, key: str) -> None:
+        """Record a failed login attempt; may trigger lockout."""
+        if not self.enabled:
+            return
+        if self._redis_available():
+            try:
+                self._record_failed_redis(key)
+                return
+            except Exception:
+                pass
+        
+        self._record_failed_memory(key)
+
+    def clear(self, key: str) -> None:
+        """Clear failed attempts (call on successful login)."""
+        if not self.enabled:
+            return
+        k = self._key(key)
+        if self._redis_available():
+            try:
+                self.r.delete(k)
+                return
+            except Exception:
+                pass
+        key_lower = key.lower()
+        if key_lower in self._memory_store:
+            del self._memory_store[key_lower]
+
+    def _is_locked_redis(self, key: str) -> bool:
+        k = self._key(key)
+        count = self.r.get(k)
+        if count is None:
+            return False
+        return int(count) >= self.max_attempts
+
+    def _record_failed_redis(self, key: str) -> None:
+        k = self._key(key)
+        count = self.r.incr(k)
+        if count == 1:
+            self.r.expire(k, self.lockout_seconds)
+        elif count >= self.max_attempts:
+            self.r.expire(k, self.lockout_seconds)
+
+    def _is_locked_memory(self, key: str) -> bool:
+        key_lower = key.lower()
+        if key_lower not in self._memory_store:
+            return False
+        now = int(time.time())
+        entry = self._memory_store[key_lower]
+        lock_until_ts = entry.get("lock_until_ts", 0)
+        # Only clear when a lockout was set and has expired (don't clear when lock_until_ts is 0)
+        if lock_until_ts > 0 and now >= lock_until_ts:
+            del self._memory_store[key_lower]
+            return False
+        return entry.get("count", 0) >= self.max_attempts
+
+    def _record_failed_memory(self, key: str) -> None:
+        key_lower = key.lower()
+        now = int(time.time())
+        if key_lower not in self._memory_store:
+            self._memory_store[key_lower] = {"count": 0, "lock_until_ts": 0}
+        entry = self._memory_store[key_lower]
+
+        # Only reset count when a previous lockout has expired (don't reset when lock_until_ts is 0)
+        if entry["lock_until_ts"] > 0 and now >= entry["lock_until_ts"]:
+            entry["count"] = 0
+            entry["lock_until_ts"] = 0
+        entry["count"] = entry.get("count", 0) + 1
+        if entry["count"] >= self.max_attempts:
+            entry["lock_until_ts"] = now + self.lockout_seconds

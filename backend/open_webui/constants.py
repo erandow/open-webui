@@ -73,6 +73,8 @@ class ERROR_MESSAGES(str, Enum):
         lambda err="": f"Invalid format. Please use the correct format{err}"
     )
     RATE_LIMIT_EXCEEDED = "API rate limit exceeded"
+    SIGNIN_RATE_LIMIT_EXCEEDED = "Too many login attempts. Please wait a few minutes and try again."
+    ACCOUNT_TEMPORARILY_LOCKED = "Too many failed login attempts. Please try again in 15 minutes."
 
     MODEL_NOT_FOUND = lambda name="": f"Model '{name}' was not found"
     OPENAI_NOT_FOUND = lambda name="": "OpenAI API was not found"

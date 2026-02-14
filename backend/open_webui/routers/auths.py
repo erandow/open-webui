@@ -75,7 +75,7 @@ from open_webui.utils.access_control import get_permissions, has_permission
 from open_webui.utils.groups import apply_default_group_assignment
 
 from open_webui.utils.redis import get_redis_client
-from open_webui.utils.rate_limit import RateLimiter
+from open_webui.utils.rate_limit import RateLimiter, FailedLoginTracker
 
 
 from typing import Optional, List
@@ -92,6 +92,25 @@ log = logging.getLogger(__name__)
 signin_rate_limiter = RateLimiter(
     redis_client=get_redis_client(), limit=5 * 3, window=60 * 3
 )
+# Per-IP rate limit to mitigate DDoS / credential stuffing from many attempts
+signin_ip_rate_limiter = RateLimiter(
+    redis_client=get_redis_client(), limit=30, window=60 * 5
+)
+failed_login_tracker = FailedLoginTracker(
+    redis_client=get_redis_client(),
+    max_attempts=5,
+lockout_seconds=90,  # 1.5 minutes
+)
+
+
+def _get_client_ip(request: Request) -> str:
+    """Client IP, respecting X-Forwarded-For / X-Real-IP when behind a proxy."""
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    if request.headers.get("x-real-ip"):
+        return request.headers["x-real-ip"]
+    return request.client.host if request.client else "unknown"
 
 
 def create_session_response(
@@ -591,6 +610,9 @@ async def signin(
             detail=ERROR_MESSAGES.ACTION_PROHIBITED,
         )
 
+    user = None
+    password_auth_used = False
+
     if WEBUI_AUTH_TRUSTED_EMAIL_HEADER:
         if WEBUI_AUTH_TRUSTED_EMAIL_HEADER not in request.headers:
             raise HTTPException(400, detail=ERROR_MESSAGES.INVALID_TRUSTED_HEADER)
@@ -652,10 +674,24 @@ async def signin(
                 db=db,
             )
     else:
-        if signin_rate_limiter.is_limited(form_data.email.lower()):
+        password_auth_used = True
+        email_lower = form_data.email.lower()
+        client_ip = _get_client_ip(request)
+
+        if signin_ip_rate_limiter.is_limited(client_ip):
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                detail=ERROR_MESSAGES.RATE_LIMIT_EXCEEDED,
+                detail=ERROR_MESSAGES.SIGNIN_RATE_LIMIT_EXCEEDED,
+            )
+        if failed_login_tracker.is_locked(email_lower):
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=ERROR_MESSAGES.ACCOUNT_TEMPORARILY_LOCKED,
+            )
+        if signin_rate_limiter.is_limited(email_lower):
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=ERROR_MESSAGES.SIGNIN_RATE_LIMIT_EXCEEDED,
             )
 
         password_bytes = form_data.password.encode("utf-8")
@@ -668,14 +704,19 @@ async def signin(
             form_data.password = password_bytes.decode("utf-8", errors="ignore")
 
         user = Auths.authenticate_user(
-            form_data.email.lower(),
+            email_lower,
             lambda pw: verify_password(form_data.password, pw),
             db=db,
         )
 
     if user:
+        if password_auth_used:
+            failed_login_tracker.clear(form_data.email.lower())
         return create_session_response(request, user, db, response, set_cookie=True)
     else:
+        if password_auth_used:
+            print(f"Recording failed login for {form_data.email.lower()}")
+            failed_login_tracker.record_failed(form_data.email.lower())
         raise HTTPException(400, detail=ERROR_MESSAGES.INVALID_CRED)
 
 
