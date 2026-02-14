@@ -324,6 +324,19 @@ export const userSignUp = async (
 	return res;
 };
 
+/**
+ * Call signout when the tab/window is closing (e.g. user closed the tab).
+ * Uses keepalive so the request can complete during page unload.
+ * Use with pagehide/beforeunload for single-session: closing the tab clears the server session.
+ */
+export const signOutOnTabClose = (): void => {
+	fetch(`${WEBUI_API_BASE_URL}/auths/signout`, {
+		method: 'GET',
+		credentials: 'include',
+		keepalive: true
+	});
+};
+
 export const userSignOut = async () => {
 	let error = null;
 

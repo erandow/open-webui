@@ -40,6 +40,7 @@ from open_webui.env import (
     WEBUI_AUTH_SIGNOUT_REDIRECT_URL,
     ENABLE_INITIAL_ADMIN_SIGNUP,
     ENABLE_OAUTH_TOKEN_EXCHANGE,
+    ENABLE_SINGLE_SESSION,
     AIOHTTP_CLIENT_SESSION_SSL,
 )
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -67,6 +68,9 @@ from open_webui.utils.auth import (
     get_current_user,
     get_password_hash,
     get_http_authorization_cred,
+    user_has_active_session,
+    set_user_session,
+    clear_user_session,
 )
 from open_webui.internal.db import get_session
 from sqlalchemy.orm import Session
@@ -113,7 +117,7 @@ def _get_client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
-def create_session_response(
+async def create_session_response(
     request: Request, user, db, response: Response = None, set_cookie: bool = False
 ) -> dict:
     """
@@ -127,6 +131,13 @@ def create_session_response(
         response: FastAPI response object (required if set_cookie is True)
         set_cookie: Whether to set the auth cookie on the response
     """
+    if ENABLE_SINGLE_SESSION and getattr(request.app.state, "redis", None):
+        if await user_has_active_session(request, user.id):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=ERROR_MESSAGES.ALREADY_LOGGED_IN_ANOTHER_DEVICE,
+            )
+
     expires_delta = parse_duration(request.app.state.config.JWT_EXPIRES_IN)
     expires_at = None
     if expires_delta:
@@ -136,6 +147,14 @@ def create_session_response(
         data={"id": user.id},
         expires_delta=expires_delta,
     )
+    if ENABLE_SINGLE_SESSION and getattr(request.app.state, "redis", None):
+        data = decode_token(token)
+        jti = data.get("jti")
+        exp = data.get("exp")
+        if jti and exp:
+            ttl = exp - int(time.time())
+            if ttl > 0:
+                await set_user_session(request, user.id, jti, ttl)
 
     if set_cookie and response:
         datetime_expires_at = (
@@ -580,7 +599,7 @@ async def ldap_auth(
                     except Exception as e:
                         log.error(f"Failed to sync groups for user {user.id}: {e}")
 
-                return create_session_response(
+                return await create_session_response(
                     request, user, db, response, set_cookie=True
                 )
             else:
@@ -712,7 +731,7 @@ async def signin(
     if user:
         if password_auth_used:
             failed_login_tracker.clear(form_data.email.lower())
-        return create_session_response(request, user, db, response, set_cookie=True)
+        return await create_session_response(request, user, db, response, set_cookie=True)
     else:
         if password_auth_used:
             print(f"Recording failed login for {form_data.email.lower()}")
@@ -827,7 +846,7 @@ async def signup(
             form_data.profile_image_url,
             db=db,
         )
-        return create_session_response(request, user, db, response, set_cookie=True)
+        return await create_session_response(request, user, db, response, set_cookie=True)
     except HTTPException:
         raise
     except Exception as err:
@@ -850,7 +869,11 @@ async def signout(
         token = request.cookies.get("token")
 
     if token:
+        decoded = decode_token(token)
+        user_id = decoded.get("id") if decoded else None
         await invalidate_token(request, token)
+        if ENABLE_SINGLE_SESSION and user_id and getattr(request.app.state, "redis", None):
+            await clear_user_session(request, user_id)
 
     response.delete_cookie("token")
     response.delete_cookie("oui-session")
@@ -960,6 +983,14 @@ async def add_user(
             )
 
             token = create_token(data={"id": user.id})
+            if ENABLE_SINGLE_SESSION and getattr(request.app.state, "redis", None):
+                data = decode_token(token)
+                jti = data.get("jti")
+                exp = data.get("exp")
+                if jti and exp:
+                    ttl = exp - int(time.time())
+                    if ttl > 0:
+                        await set_user_session(request, user.id, jti, ttl)
             return {
                 "token": token,
                 "token_type": "Bearer",
@@ -1406,4 +1437,4 @@ async def token_exchange(
             detail="User not found. Please sign in via the web interface first.",
         )
 
-    return create_session_response(request, user, db)
+    return await create_session_response(request, user, db)

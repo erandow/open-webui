@@ -447,6 +447,11 @@ except ValueError:
 
 WEBUI_AUTH = os.environ.get("WEBUI_AUTH", "True").lower() == "true"
 
+# Restrict user to a single active session (no login from another device while logged in)
+ENABLE_SINGLE_SESSION = (
+    os.environ.get("ENABLE_SINGLE_SESSION", "False").lower() == "true"
+)
+
 ENABLE_INITIAL_ADMIN_SIGNUP = (
     os.environ.get("ENABLE_INITIAL_ADMIN_SIGNUP", "False").lower() == "true"
 )

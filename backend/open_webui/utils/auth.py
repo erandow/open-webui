@@ -227,6 +227,45 @@ async def is_valid_token(request, decoded) -> bool:
     return True
 
 
+def _user_session_key(user_id: str) -> str:
+    return f"{REDIS_KEY_PREFIX}:auth:user_session:{user_id}"
+
+
+async def user_has_active_session(request: Request, user_id: str) -> bool:
+    """Return True if this user already has an active session (single-session enforcement)."""
+    if not getattr(request.app.state, "redis", None):
+        return False
+    key = _user_session_key(user_id)
+    existing = await request.app.state.redis.get(key)
+    return existing is not None
+
+
+async def set_user_session(
+    request: Request, user_id: str, jti: str, ttl_seconds: int
+) -> bool:
+    """Record the current session for this user (single-session). Key expires with the token.
+    Returns True if the write succeeded, False if skipped or on Redis error."""
+    redis = getattr(request.app.state, "redis", None)
+    if not redis or ttl_seconds <= 0 or not jti:
+        return False
+    key = _user_session_key(user_id)
+    try:
+        await redis.set(key, jti, ex=ttl_seconds)
+        log.debug("Single-session: stored session for user_id=%s", user_id)
+        return True
+    except Exception as e:
+        log.warning("Single-session: failed to store session for user_id=%s: %s", user_id, e)
+        return False
+
+
+async def clear_user_session(request: Request, user_id: str) -> None:
+    """Remove the current session for this user (on signout)."""
+    if not getattr(request.app.state, "redis", None):
+        return
+    key = _user_session_key(user_id)
+    await request.app.state.redis.delete(key)
+
+
 async def invalidate_token(request, token):
     decoded = decode_token(token)
 

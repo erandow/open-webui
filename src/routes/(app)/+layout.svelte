@@ -13,6 +13,7 @@
 	import { getTools } from '$lib/apis/tools';
 	import { getBanners } from '$lib/apis/configs';
 	import { getUserSettings } from '$lib/apis/users';
+	import { signOutOnTabClose } from '$lib/apis/auths';
 
 	import { WEBUI_VERSION } from '$lib/constants';
 	import { compareVersion } from '$lib/utils';
@@ -149,6 +150,11 @@
 		if (!['user', 'admin'].includes($user?.role)) {
 			return;
 		}
+
+		// When the tab/window is closed, send signout so the server clears the session (single-session).
+		const handleTabClose = () => signOutOnTabClose();
+		window.addEventListener('pagehide', handleTabClose);
+		const cleanupTabClose = () => window.removeEventListener('pagehide', handleTabClose);
 
 		clearChatInputStorage();
 		await Promise.all([
@@ -293,6 +299,7 @@
 		await tick();
 
 		loaded = true;
+		return cleanupTabClose;
 	});
 
 	const checkForVersionUpdates = async () => {

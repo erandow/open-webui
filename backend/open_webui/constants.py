@@ -75,6 +75,9 @@ class ERROR_MESSAGES(str, Enum):
     RATE_LIMIT_EXCEEDED = "API rate limit exceeded"
     SIGNIN_RATE_LIMIT_EXCEEDED = "Too many login attempts. Please wait a few minutes and try again."
     ACCOUNT_TEMPORARILY_LOCKED = "Too many failed login attempts. Please try again in 15 minutes."
+    ALREADY_LOGGED_IN_ANOTHER_DEVICE = (
+        "You are already signed in on another device. Sign out there first, or wait for the session to expire."
+    )
 
     MODEL_NOT_FOUND = lambda name="": f"Model '{name}' was not found"
     OPENAI_NOT_FOUND = lambda name="": "OpenAI API was not found"
