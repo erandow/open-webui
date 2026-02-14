@@ -483,6 +483,7 @@ from open_webui.env import (
     ENABLE_SCIM,
     SCIM_TOKEN,
     ENABLE_COMPRESSION_MIDDLEWARE,
+    ENABLE_BOT_DETECTION,
     ENABLE_WEBSOCKET_SUPPORT,
     BYPASS_MODEL_ACCESS_CONTROL,
     RESET_CONFIG_ON_START,
@@ -536,6 +537,7 @@ from open_webui.utils.oauth import (
     OAuthClientInformationFull,
 )
 from open_webui.utils.security_headers import SecurityHeadersMiddleware
+from open_webui.utils.bot_detection import BotDetectionMiddleware
 from open_webui.utils.redis import get_redis_connection
 
 from open_webui.tasks import (
@@ -1337,6 +1339,8 @@ class RedirectMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(RedirectMiddleware)
 app.add_middleware(SecurityHeadersMiddleware)
+if ENABLE_BOT_DETECTION:
+    app.add_middleware(BotDetectionMiddleware)
 
 
 class APIKeyRestrictionMiddleware(BaseHTTPMiddleware):

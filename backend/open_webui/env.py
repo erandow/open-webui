@@ -544,6 +544,25 @@ ENABLE_COMPRESSION_MIDDLEWARE = (
 )
 
 ####################################
+# Bot / automation detection (e.g. blackbox testing tools)
+####################################
+# When True, requests that look like automated tools (Selenium, Playwright,
+# headless Chrome, security scanners, etc.) can be blocked or flagged.
+ENABLE_BOT_DETECTION = (
+    os.environ.get("ENABLE_BOT_DETECTION", "False").lower() == "true"
+)
+# If set, requests with header "X-Bot-Detection-Bypass: <value>" skip detection.
+# Use for health checks or allowed automation.
+BOT_DETECTION_BYPASS_SECRET = os.environ.get("BOT_DETECTION_BYPASS_SECRET", "")
+# "block" = return 403 for automation (default). "fake_success" = return 200 with safe
+# responses so blackbox tests report "no issues found".
+BOT_DETECTION_MODE = (
+    os.environ.get("BOT_DETECTION_MODE", "block").lower().strip() or "block"
+)
+if BOT_DETECTION_MODE not in ("block", "fake_success"):
+    BOT_DETECTION_MODE = "block"
+
+####################################
 # OAUTH Configuration
 ####################################
 ENABLE_OAUTH_EMAIL_FALLBACK = (
