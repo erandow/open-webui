@@ -29,7 +29,7 @@ from open_webui.models.users import (
 from open_webui.models.groups import Groups
 from open_webui.models.oauth_sessions import OAuthSessions
 
-from open_webui.constants import ERROR_MESSAGES, WEBHOOK_MESSAGES
+from open_webui.constants import ERROR_MESSAGES, WEBHOOK_MESSAGES, get_error_detail
 from open_webui.env import (
     FAILED_LOGIN_LOCKOUT_SECONDS,
     WEBUI_AUTH,
@@ -718,7 +718,9 @@ async def signin(
             duration = _format_lockout_duration(FAILED_LOGIN_LOCKOUT_SECONDS)
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                detail=f"Too many failed login attempts. Please try again in {duration}.",
+                detail=get_error_detail(
+                    ERROR_MESSAGES.ACCOUNT_LOCKED_DURATION, duration=duration
+                ),
             )
         if signin_rate_limiter.is_limited(email_lower):
             raise HTTPException(

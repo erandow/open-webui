@@ -68,7 +68,7 @@
 
 	const updateModelsHandler = async () => {
 		updateCancelled = false;
-		toast.info('Checking for model updates...');
+		toast.info($i18n.t('Checking for model updates...'));
 
 		for (const model of ollamaModels) {
 			if (updateCancelled) {
@@ -142,9 +142,9 @@
 		}
 
 		if (updateCancelled) {
-			toast.info('Model update cancelled');
+			toast.info($i18n.t('Model update cancelled'));
 		} else {
-			toast.success('All models are up to date');
+			toast.success($i18n.t('All models are up to date'));
 		}
 		updateModelId = null;
 		updateProgress = null;

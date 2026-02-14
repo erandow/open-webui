@@ -1,4 +1,24 @@
+from __future__ import annotations
+
 from enum import Enum
+from typing import Any
+
+
+def get_error_detail(enum_member: ERROR_MESSAGES, **kwargs: Any) -> dict:
+    """
+    Build a structured error detail for API responses so the frontend can
+    translate by code. Returns {"code": "ENUM_NAME", "message": "English text", "params": {...}}.
+    Use this instead of passing ERROR_MESSAGES member directly when you want i18n.
+    """
+    if callable(enum_member.value):
+        message = enum_member.value(**kwargs)
+    else:
+        message = enum_member.value
+    return {
+        "code": enum_member.name,
+        "message": message,
+        "params": kwargs,
+    }
 
 
 class MESSAGES(str, Enum):
@@ -75,6 +95,9 @@ class ERROR_MESSAGES(str, Enum):
     RATE_LIMIT_EXCEEDED = "API rate limit exceeded"
     SIGNIN_RATE_LIMIT_EXCEEDED = "Too many login attempts. Please wait a few minutes and try again."
     ACCOUNT_TEMPORARILY_LOCKED = "Too many failed login attempts. Please try again in 15 minutes."
+    ACCOUNT_LOCKED_DURATION = (
+        lambda duration="": f"Too many failed login attempts. Please try again in {duration}."
+    )
     ALREADY_LOGGED_IN_ANOTHER_DEVICE = (
         "You are already signed in on another device. Sign out there first, or wait for the session to expire."
     )

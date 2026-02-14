@@ -29,7 +29,7 @@
 		}
 
 		const res = await loadUrlHandler(url).catch((err) => {
-			toast.error(`${err}`);
+			toast.error($i18n.t('An error occurred: {{message}}', { message: err }));
 			loading = false;
 			return null;
 		});

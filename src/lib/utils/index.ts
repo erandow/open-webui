@@ -26,6 +26,23 @@ import hljs from 'highlight.js';
 // Helper functions
 //////////////////////////
 
+/**
+ * Turn backend error detail (string or { code, message, params }) into a message for display.
+ * Use with i18n so backend error codes can be translated: backendErrorToMessage(err.detail, $i18n.t)
+ */
+export function backendErrorToMessage(
+	detail: string | { code?: string; message?: string; params?: Record<string, unknown> } | null,
+	t: (key: string, params?: Record<string, unknown>) => string
+): string {
+	if (detail == null) return '';
+	if (typeof detail === 'string') return detail;
+	if (detail.code && typeof detail.code === 'string') {
+		const translated = t(detail.code, detail.params ?? {});
+		return translated !== detail.code ? translated : detail.message ?? '';
+	}
+	return detail.message ?? '';
+}
+
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const formatNumber = (num: number): string => {

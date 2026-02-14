@@ -241,15 +241,14 @@
 
 			{#if role === 'admin'}
 				<DropdownMenu.Item
-					as="a"
-					href="/playground"
-					class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition select-none"
+					class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer"
 					onSelect={async () => {
 						show = false;
 						if ($mobile) {
 							await tick();
 							showSidebar.set(false);
 						}
+						await goto('/playground');
 					}}
 				>
 					<div class=" self-center mr-3">
@@ -258,15 +257,14 @@
 					<div class=" self-center truncate">{$i18n.t('Playground')}</div>
 				</DropdownMenu.Item>
 				<DropdownMenu.Item
-					as="a"
-					href="/admin"
-					class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition select-none"
+					class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer"
 					onSelect={async () => {
 						show = false;
 						if ($mobile) {
 							await tick();
 							showSidebar.set(false);
 						}
+						await goto('/admin');
 					}}
 				>
 					<div class=" self-center mr-3">

@@ -92,7 +92,7 @@
 			})
 		);
 		if (res) {
-			toast.success(`Successfully imported ${res.length} chats.`);
+			toast.success($i18n.t('Successfully imported {{count}} chats.', { count: res.length }));
 		}
 
 		currentChatPage.set(1);
@@ -111,7 +111,7 @@
 	const archiveAllChatsHandler = async () => {
 		await goto('/');
 		await archiveAllChats(sessionStorage.token).catch((error) => {
-			toast.error(`${error}`);
+			toast.error($i18n.t('Failed to archive chats: {{error}}', { error }));
 		});
 
 		currentChatPage.set(1);
@@ -123,7 +123,7 @@
 	const deleteAllChatsHandler = async () => {
 		await goto('/');
 		await deleteAllChats(sessionStorage.token).catch((error) => {
-			toast.error(`${error}`);
+			toast.error($i18n.t('Failed to delete chats: {{error}}', { error }));
 		});
 
 		currentChatPage.set(1);

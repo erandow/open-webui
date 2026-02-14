@@ -54,7 +54,7 @@
 				_user.role,
 				generateInitialsImage(_user.name)
 			).catch((error) => {
-				toast.error(`${error}`);
+				toast.error($i18n.t('An error occurred: {{message}}', { message: error }));
 			});
 
 			if (res) {
@@ -91,7 +91,7 @@
 									columns[3].toLowerCase(),
 									generateInitialsImage(columns[0])
 								).catch((error) => {
-									toast.error(`Row ${idx + 1}: ${error}`);
+									toast.error($i18n.t('Row {{row}}: {{error}}', { row: idx + 1, error }));
 									return null;
 								});
 
@@ -99,7 +99,7 @@
 									userCount = userCount + 1;
 								}
 							} else {
-								toast.error(`Row ${idx + 1}: invalid format.`);
+								toast.error($i18n.t('Row {{row}}: invalid format.', { row: idx + 1 }));
 							}
 						}
 					}

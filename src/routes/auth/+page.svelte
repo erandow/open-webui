@@ -20,7 +20,7 @@
 	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
 	import { WEBUI_NAME, config, user, socket } from '$lib/stores';
 
-	import { generateInitialsImage, canvasPixelTest, getUserTimezone } from '$lib/utils';
+	import { generateInitialsImage, canvasPixelTest, getUserTimezone, backendErrorToMessage } from '$lib/utils';
 
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import OnBoarding from '$lib/components/OnBoarding.svelte';
@@ -70,7 +70,7 @@
 
 	const signInHandler = async () => {
 		const sessionUser = await userSignIn(email, password).catch((error) => {
-			toast.error(`${error}`);
+			toast.error(backendErrorToMessage(error, $i18n.t));
 			return null;
 		});
 
@@ -87,7 +87,7 @@
 
 		const sessionUser = await userSignUp(name, email, password, generateInitialsImage(name)).catch(
 			(error) => {
-				toast.error(`${error}`);
+				toast.error(backendErrorToMessage(error, $i18n.t));
 				return null;
 			}
 		);
@@ -97,7 +97,7 @@
 
 	const ldapSignInHandler = async () => {
 		const sessionUser = await ldapUserSignIn(ldapUsername, password).catch((error) => {
-			toast.error(`${error}`);
+			toast.error(backendErrorToMessage(error, $i18n.t));
 			return null;
 		});
 		await setSessionUser(sessionUser);
@@ -128,7 +128,7 @@
 		}
 
 		const sessionUser = await getSessionUser(token).catch((error) => {
-			toast.error(`${error}`);
+			toast.error(backendErrorToMessage(error, $i18n.t));
 			return null;
 		});
 
@@ -177,7 +177,7 @@
 
 		const error = $page.url.searchParams.get('error');
 		if (error) {
-			toast.error(error);
+			toast.error(backendErrorToMessage(error, $i18n.t));
 		}
 
 		await oauthCallbackHandler();

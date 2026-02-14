@@ -551,7 +551,7 @@ from open_webui.tasks import (
 from open_webui.utils.redis import get_sentinels_from_env
 
 
-from open_webui.constants import ERROR_MESSAGES
+from open_webui.constants import ERROR_MESSAGES, get_error_detail
 
 if SAFE_MODE:
     print("SAFE MODE ENABLED")
@@ -671,6 +671,23 @@ app = FastAPI(
     redoc_url=None,
     lifespan=lifespan,
 )
+
+
+@app.exception_handler(HTTPException)
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request, exc):
+    """Convert ERROR_MESSAGES enum to {code, message, params} so frontend can translate by code."""
+    detail = exc.detail
+    if isinstance(detail, ERROR_MESSAGES):
+        try:
+            detail = get_error_detail(detail)
+        except Exception:
+            pass
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": detail},
+    )
+
 
 # For Majid OIDC/OAuth2
 oauth_manager = OAuthManager(app)

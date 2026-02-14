@@ -9,7 +9,7 @@
 	export let className = '';
 
 	export let value = '';
-	export let placeholder = 'Select an option';
+	export let placeholder = '';
 	export let items = [
 		{ value: 'new', label: $i18n.t('New') },
 		{ value: 'top', label: $i18n.t('Top') }
@@ -27,7 +27,7 @@
 				? className
 				: 'flex w-full items-center gap-2 truncate bg-transparent px-0.5 text-sm placeholder-gray-400 outline-hidden focus:outline-hidden'}
 		>
-			{items.find((item) => item.value === value)?.label ?? placeholder}
+			{items.find((item) => item.value === value)?.label ?? (placeholder || $i18n.t('Select an option'))}
 			<ChevronDown className=" size-3" strokeWidth="2.5" />
 		</div>
 	</DropdownMenu.Trigger>
