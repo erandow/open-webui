@@ -31,6 +31,7 @@ from open_webui.models.oauth_sessions import OAuthSessions
 
 from open_webui.constants import ERROR_MESSAGES, WEBHOOK_MESSAGES
 from open_webui.env import (
+    FAILED_LOGIN_LOCKOUT_SECONDS,
     WEBUI_AUTH,
     WEBUI_AUTH_TRUSTED_EMAIL_HEADER,
     WEBUI_AUTH_TRUSTED_NAME_HEADER,
@@ -103,7 +104,7 @@ signin_ip_rate_limiter = RateLimiter(
 failed_login_tracker = FailedLoginTracker(
     redis_client=get_redis_client(),
     max_attempts=5,
-lockout_seconds=90,  # 1.5 minutes
+    lockout_seconds=FAILED_LOGIN_LOCKOUT_SECONDS,
 )
 
 
@@ -115,6 +116,17 @@ def _get_client_ip(request: Request) -> str:
     if request.headers.get("x-real-ip"):
         return request.headers["x-real-ip"]
     return request.client.host if request.client else "unknown"
+
+
+def _format_lockout_duration(seconds: int) -> str:
+    """Format lockout seconds for user-facing message (e.g. '2 minutes', '45 seconds')."""
+    if seconds < 60:
+        return f"{seconds} second{'s' if seconds != 1 else ''}"
+    minutes = seconds / 60
+    if minutes == int(minutes):
+        m = int(minutes)
+        return f"{m} minute{'s' if m != 1 else ''}"
+    return f"{minutes:.1f} minutes"
 
 
 async def create_session_response(
@@ -703,9 +715,10 @@ async def signin(
                 detail=ERROR_MESSAGES.SIGNIN_RATE_LIMIT_EXCEEDED,
             )
         if failed_login_tracker.is_locked(email_lower):
+            duration = _format_lockout_duration(FAILED_LOGIN_LOCKOUT_SECONDS)
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                detail=ERROR_MESSAGES.ACCOUNT_TEMPORARILY_LOCKED,
+                detail=f"Too many failed login attempts. Please try again in {duration}.",
             )
         if signin_rate_limiter.is_limited(email_lower):
             raise HTTPException(

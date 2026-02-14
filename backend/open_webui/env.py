@@ -452,6 +452,15 @@ ENABLE_SINGLE_SESSION = (
     os.environ.get("ENABLE_SINGLE_SESSION", "False").lower() == "true"
 )
 
+# Failed login lockout: seconds to lock account after max failed attempts (default 90 = 1.5 min)
+FAILED_LOGIN_LOCKOUT_SECONDS = os.environ.get("FAILED_LOGIN_LOCKOUT_SECONDS", "90")
+try:
+    FAILED_LOGIN_LOCKOUT_SECONDS = int(FAILED_LOGIN_LOCKOUT_SECONDS)
+    if FAILED_LOGIN_LOCKOUT_SECONDS < 0:
+        FAILED_LOGIN_LOCKOUT_SECONDS = 90
+except ValueError:
+    FAILED_LOGIN_LOCKOUT_SECONDS = 90
+
 ENABLE_INITIAL_ADMIN_SIGNUP = (
     os.environ.get("ENABLE_INITIAL_ADMIN_SIGNUP", "False").lower() == "true"
 )
