@@ -141,7 +141,7 @@
 							class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-xl {!fileUploadEnabled
 								? 'opacity-50'
 								: ''}"
-							on:click={() => {
+							onSelect={() => {
 								if (fileUploadEnabled) {
 									uploadFilesHandler();
 								}
@@ -165,7 +165,7 @@
 							class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50  rounded-xl {!fileUploadEnabled
 								? 'opacity-50'
 								: ''}"
-							on:click={() => {
+							onSelect={() => {
 								if (fileUploadEnabled) {
 									if (!detectMobile()) {
 										screenCaptureHandler();
@@ -196,7 +196,7 @@
 							class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl {!fileUploadEnabled
 								? 'opacity-50'
 								: ''}"
-							on:click={() => {
+							onSelect={() => {
 								if (fileUploadEnabled) {
 									showAttachWebpageModal = true;
 								}
@@ -303,7 +303,7 @@
 						{#if $config?.features?.enable_google_drive_integration}
 							<DropdownMenu.Item
 								class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-xl"
-								on:click={() => {
+								onSelect={() => {
 									uploadGoogleDriveHandler();
 								}}
 							>
@@ -522,7 +522,7 @@
 					{#if $config?.features?.enable_onedrive_personal}
 						<DropdownMenu.Item
 							class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-xl text-left"
-							on:click={() => {
+							onSelect={() => {
 								uploadOneDriveHandler('personal');
 							}}
 						>
@@ -535,7 +535,7 @@
 					{#if $config?.features?.enable_onedrive_business}
 						<DropdownMenu.Item
 							class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-xl text-left"
-							on:click={() => {
+							onSelect={() => {
 								uploadOneDriveHandler('organizations');
 							}}
 						>

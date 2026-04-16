@@ -1,0 +1,1 @@
+docker build --pull   --build-arg USE_SLIM=true -t "open-webui" .

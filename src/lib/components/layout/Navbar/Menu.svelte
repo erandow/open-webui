@@ -287,7 +287,7 @@
 		>
 			<!-- <DropdownMenu.Item
 				class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer dark:hover:bg-gray-800 rounded-xl"
-				on:click={async () => {
+				onSelect={async () => {
 					await showSettings.set(!$showSettings);
 				}}
 			>
@@ -317,7 +317,7 @@
 				<DropdownMenu.Item
 					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
 					id="chat-controls-button"
-					on:click={async () => {
+					onSelect={async () => {
 						await showControls.set(true);
 						await showOverview.set(false);
 						await showArtifacts.set(false);
@@ -332,7 +332,7 @@
 			<DropdownMenu.Item
 				class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
 				id="chat-overview-button"
-				on:click={async () => {
+				onSelect={async () => {
 					await showControls.set(true);
 					await showOverview.set(true);
 					await showArtifacts.set(false);
@@ -347,7 +347,7 @@
 				<DropdownMenu.Item
 					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
 					id="chat-overview-button"
-					on:click={async () => {
+					onSelect={async () => {
 						await showControls.set(true);
 						await showArtifacts.set(true);
 						await showOverview.set(false);
@@ -365,7 +365,7 @@
 				<DropdownMenu.Item
 					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
 					id="chat-share-button"
-					on:click={() => {
+					onSelect={() => {
 						shareHandler();
 					}}
 				>
@@ -390,7 +390,7 @@
 					{#if $user?.role === 'admin' || ($user.permissions?.chat?.export ?? true)}
 						<DropdownMenu.Item
 							class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
-							on:click={() => {
+							onSelect={() => {
 								downloadJSONExport();
 							}}
 						>
@@ -399,7 +399,7 @@
 					{/if}
 					<DropdownMenu.Item
 						class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
-						on:click={() => {
+						onSelect={() => {
 							downloadTxt();
 						}}
 					>
@@ -408,7 +408,7 @@
 
 					<DropdownMenu.Item
 						class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
-						on:click={() => {
+						onSelect={() => {
 							downloadPdf();
 						}}
 					>
@@ -420,7 +420,7 @@
 			<DropdownMenu.Item
 				class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
 				id="chat-copy-button"
-				on:click={async () => {
+				onSelect={async () => {
 					const res = await copyToClipboard(await getChatAsText()).catch((e) => {
 						console.error(e);
 					});
@@ -455,7 +455,7 @@
 								{#if folder?.id}
 									<DropdownMenu.Item
 										class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl"
-										on:click={() => {
+										onSelect={() => {
 											moveChatHandler(chat.id, folder.id);
 										}}
 									>
@@ -471,7 +471,7 @@
 
 				<DropdownMenu.Item
 					class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl"
-					on:click={() => {
+					onSelect={() => {
 						archiveChatHandler();
 					}}
 				>

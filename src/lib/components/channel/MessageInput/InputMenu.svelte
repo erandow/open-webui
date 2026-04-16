@@ -55,7 +55,7 @@
 		>
 			<DropdownMenu.Item
 				class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-xl"
-				on:click={() => {
+				onSelect={() => {
 					uploadFilesHandler();
 				}}
 			>
@@ -65,7 +65,7 @@
 
 			<DropdownMenu.Item
 				class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50  rounded-xl"
-				on:click={() => {
+				onSelect={() => {
 					screenCaptureHandler();
 				}}
 			>

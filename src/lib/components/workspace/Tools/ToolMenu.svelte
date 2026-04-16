@@ -48,7 +48,7 @@
 		>
 			<DropdownMenu.Item
 				class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800  rounded-xl"
-				on:click={() => {
+				onSelect={() => {
 					editHandler();
 				}}
 			>
@@ -73,7 +73,7 @@
 			{#if $config.features.enable_community_sharing}
 				<DropdownMenu.Item
 					class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800  rounded-xl"
-					on:click={() => {
+					onSelect={() => {
 						shareHandler();
 					}}
 				>
@@ -84,7 +84,7 @@
 
 			<DropdownMenu.Item
 				class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl"
-				on:click={() => {
+				onSelect={() => {
 					cloneHandler();
 				}}
 			>
@@ -96,7 +96,7 @@
 			{#if $user?.role === 'admin' || $user?.permissions?.workspace?.tools_export}
 				<DropdownMenu.Item
 					class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl"
-					on:click={() => {
+					onSelect={() => {
 						exportHandler();
 					}}
 				>
@@ -110,7 +110,7 @@
 
 			<DropdownMenu.Item
 				class="flex  gap-2  items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl"
-				on:click={() => {
+				onSelect={() => {
 					deleteHandler();
 				}}
 			>
